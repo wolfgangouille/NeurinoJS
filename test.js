@@ -1,4 +1,5 @@
-const { performance } = require('perf_hooks');
+//const { performance } = require('perf_hooks');
+//import { performance } from 'perf_hooks'
 
 const eNeuron = require('./eNeuron.js');
 const eSyn = require('./eSyn.js');
@@ -24,3 +25,5 @@ for (i=0;i<10/dt;i++){
 var endTime = performance.now()
 
 console.log(`Call to doSomething took ${endTime - startTime} milliseconds`)
+
+console.log("Bondour")
