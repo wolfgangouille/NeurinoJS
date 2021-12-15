@@ -1,4 +1,4 @@
-//const { performance } = require('perf_hooks');
+const { performance } = require('perf_hooks');
 //import { performance } from 'perf_hooks'
 
 const eNeuron = require('./eNeuron.js');
