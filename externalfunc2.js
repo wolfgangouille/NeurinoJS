@@ -167,15 +167,15 @@
 					}
 				}
 			},
-			"test.js": function (exports, module, require) {
-				//const { performance } = require('perf_hooks'); //apparently no need to import it ?
-				
+			"externalfunc.js": function (exports, module, require) {
+				function mafonction(truc){
+				  document.getElementById('searchTxt').value=truc;
+				}
 				
 				const eNeuron = require('./eNeuron.js');
 				const eSyn = require('./eSyn.js');
-				simpleSimul(0.9);
 				
-				function simpleSimul(leI){
+				function mafonction2(leI){
 				n1=new eNeuron();
 				n2=new eNeuron();
 				
@@ -200,17 +200,13 @@
 				}
 				
 				
-				
-				
 				var endTime = performance.now()
 				
 				console.log(`Call to doSomething took ${endTime - startTime} milliseconds`)
 				
 				console.log("Bondour")
 				}
-				//console.log(n1);
-				//console.log(n2);
 			}
 		}
 	}
-})("Desktop/NeurinoJS/test");
+})("Desktop/NeurinoJS/externalfunc");

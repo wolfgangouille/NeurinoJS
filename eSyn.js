@@ -1,4 +1,4 @@
-module.exports =class eSyn {
+module.exports = class eSyn {
 	constructor(neuron){
 		this.I=0;
 		this.I0=0.9;

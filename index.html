@@ -4,21 +4,21 @@
   <meta charset="utf-8">
   <title>My eNeuron test</title>
   <script src="./bundle.js"></script>
-
+  <script src="./externalfunc.js"></script>
 </head>
 <body>
   <!-- lots of HTML here -->
-  <p id="para">Some text here</p>
-  <button onclick="changeColor('blue');">blue</button>
-  <button onclick="changeColor('red');">red</button><br>
-  <input name="searchTxt" type="text" maxlength="512" id="searchTxt" class="searchField"/><br>
-  <button onclick="mafonction()">Click me</button>
-  <script> function changeColor(newColor) {
-    var elem = document.getElementById('para');
-    elem.style.color = newColor;
-  }</script>
-  <script>
-      document.getElementById('searchTxt').value="truc";
-  </script>
+  <form>
+    <label for="i">Input Current:</label><br>
+    <input type="text" id="i" name="i" value=0.0><br>
+  </form>
+  <br>
+  <button onclick="mafonction2()">Run simulation</button>
+  <br>
+  <form>
+    <label for="res">Results:</label><br>
+    <textarea id="res" name="res" rows="30" cols="100"></textarea><br>
+  </form>
+
 </body>
 </html>

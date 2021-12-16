@@ -1,10 +1,11 @@
 //const { performance } = require('perf_hooks'); //apparently no need to import it ?
 
 
-
 const eNeuron = require('./eNeuron.js');
 const eSyn = require('./eSyn.js');
+simpleSimul(0.9);
 
+function simpleSimul(leI){
 n1=new eNeuron();
 n2=new eNeuron();
 
@@ -23,20 +24,9 @@ for (i=0;i<20/dt;i++){
 	t+=dt;
 	n1.computeIsyn();
 	n2.computeIsyn();
-	n1.update(0.9,dt);
+	n1.update(leI,dt);
 	n2.update(0,dt);
 	console.log(t+" "+n1.V+" "+n2.V+" "+n1.OutSyns[0].I+" "+n2.OutSyns[0].I);
-}
-
-function mafonction(){
-	for (i=0;i<20/dt;i++){
-		t+=dt;
-		n1.computeIsyn();
-		n2.computeIsyn();
-		n1.update(0.9,dt);
-		n2.update(0,dt);
-		console.log(t+" "+n1.V+" "+n2.V+" "+n1.OutSyns[0].I+" "+n2.OutSyns[0].I);
-	}
 }
 
 
@@ -45,5 +35,6 @@ var endTime = performance.now()
 console.log(`Call to doSomething took ${endTime - startTime} milliseconds`)
 
 console.log("Bondour")
+}
 //console.log(n1);
 //console.log(n2);
