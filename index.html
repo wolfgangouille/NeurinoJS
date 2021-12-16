@@ -1,12 +1,24 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <script data-main="test.js" src="requireJS.js"></script>
-  </head>
-  <body>
-    <!-- lots of HTML here -->
-    Bondour
-  </body>
+<head>
+  <meta charset="utf-8">
+  <title>My eNeuron test</title>
+  <script src="./bundle.js"></script>
+
+</head>
+<body>
+  <!-- lots of HTML here -->
+  <p id="para">Some text here</p>
+  <button onclick="changeColor('blue');">blue</button>
+  <button onclick="changeColor('red');">red</button><br>
+  <input name="searchTxt" type="text" maxlength="512" id="searchTxt" class="searchField"/><br>
+  <button onclick="mafonction()">Click me</button>
+  <script> function changeColor(newColor) {
+    var elem = document.getElementById('para');
+    elem.style.color = newColor;
+  }</script>
+  <script>
+      document.getElementById('searchTxt').value="truc";
+  </script>
+</body>
 </html>
