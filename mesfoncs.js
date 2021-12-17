@@ -4,8 +4,11 @@ const neuralNet = require('./neuralNet.js');
 
 function runGlobalNet(){
   applyneurchanges()
-  xdata=[0];
-  simuldata=[[0],[0],[0],[0],[0],[0]]; //fix bug here to have unlimited neurons
+  xdata=[];
+  simuldata=[]; //fix bug here to have unlimited neurons
+  for (let i=0;i<globalnet.Neurons.length;i++){
+    simuldata.push([]);
+  }
   console.log("Starting simulation")
   //leI=parseFloat(document.getElementById('i').value);
 
@@ -20,7 +23,7 @@ function runGlobalNet(){
   for (let k=0;k<20/dt;k++){
     t+=dt;
     letext=letext+(Math.round(t * 100) / 100).toFixed(2)+" ";
-    xdata.push(t);
+    xdata.push((Math.round(t * 100) / 100));
     //simuldata[0].push(globalnet.Neurons[0].V);
     //simuldata[1].push(globalnet.Neurons[1].V);
     //simuldata[2].push(globalnet.Neurons[1].V);

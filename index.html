@@ -33,7 +33,7 @@
     <input type="text" id="vrest" name="vrest" value=""></input><br>
     <label for="vreset">Reset Potential:</label>
     <input type="text" id="vreset" name="vreset" value=""></input><br>
-    <label for="vthresh">Reset Potential:</label>
+    <label for="vthresh">Threshold:</label>
     <input type="text" id="vthresh" name="vthresh" value=""></input><br>
     <label for="c">Capacitance:</label>
     <input type="text" id="c" name="c" value=""></input><br>
@@ -92,57 +92,21 @@ function applyneurchanges(){
 
 
 <script>
-// check how to add datasets dynamically
+//document.getElementById("canvas").getContext("2d")
 var myChart=new Chart("myChart", {
   type: "line",
-  data: {
-    labels: [],
-    datasets: [{
-      label:"",
-      fill: false,
-      pointRadius: 0,
-      data:[],
-      borderColor: "red",
-      cubicInterpolationMode:"no",
-    },
-    {
-      label:"",
-      fill: false,
-      pointRadius: 0,
-      data:[],
-      borderColor: "green",
-      cubicInterpolationMode:"no",
-    },
-    {
-      label:"",
-      fill: false,
-      pointRadius: 0,
-      data:[],
-      borderColor: "blue",
-      cubicInterpolationMode:"no",
-    },
-    {
-      label:"",
-      fill: false,
-      pointRadius: 0,
-      data:[],
-      borderColor: "black",
-      cubicInterpolationMode:"no",
-    },
-    {
-      label:"",
-      fill: false,
-      pointRadius: 0,
-      data:[],
-      borderColor: "yellow",
-      cubicInterpolationMode:"no",
-    }
-  ]
+  data: {},
+options: {
+  //legend: {display: true},
+  scaleFontColor: 'red',
+  animation: {duration: 0},
+  scales:{
+    yAxes:[{
+      Min: 50,
+      Max: 100
+    }],
   },
-  options: {
-    legend: {display: true},
-    animation: {duration: 0}
-  }
+}
 });
 
 </script>
@@ -151,16 +115,62 @@ var myChart=new Chart("myChart", {
 
 function drawGraph(){
 
+  class datasetObject{
+    constructor(){
+      this.label="";
+      this.fill=false;
+      this.pointRadius=0,
+      this.data=[];
+      this.borderColor='red';
+      this.cubicInterpolationMode='no';
+    }
+    /*label:"",
+    fill: false,
+    pointRadius: 0,
+    data:[],
+    borderColor: "red",
+    cubicInterpolationMode:"no",*/
+  };
+
   myChart.data.labels=xdata;
-  //myChart.data.datasets.length=0;
+  myChart.data.datasets.length=0;
   for (let i=0;i<globalnet.Neurons.length;i++){
+    myChart.data.datasets.push(new datasetObject);
     myChart.data.datasets[i].data=simuldata[i];
     myChart.data.datasets[i].label="Neuron "+i.toString();
     myChart.data.datasets[i].fill=false;
     myChart.data.datasets[i].pointRadius=0;
-    myChart.data.datasets[i].borderColor= colors[i];
+    myChart.data.datasets[i].borderColor= colors[i%7];
     myChart.data.datasets[i].cubicInterpolationMode="no";
   }
+  myChart.options = {
+  legend: {display: true},
+  animation: {duration: 0},
+  scales: {
+    yAxes: [{
+      display: true,
+      ticks: {
+        maxTicksLimit: 5,
+        beginAtZero: false,
+        min: -2,
+        max: 2,
+        stepSize: 0.5
+       }
+    }],
+    xAxes: [{
+      display: true,
+      ticks: {
+        userCallback: function(label, index, labels) {
+                     // when the floored value is the same as the value we have a whole number
+
+                         return (Math.round(label*100)/100);
+
+                   },
+        maxTicksLimit: 10,
+      }
+    }]
+  }
+}
   myChart.update();
   //var xValues = [0 1 2 3 4 5];
 
