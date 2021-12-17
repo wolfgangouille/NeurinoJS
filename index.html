@@ -5,6 +5,7 @@
   <title>My eNeuron Simulator</title>
   <script src="./bundle.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+  <script>   xdata=[];  simuldata=[];  myChart=null; colors=["red","green","blue","magenta","yellow","cyan","black"]</script>
 </head>
 <body>
   <!-- lots of HTML here -->
@@ -48,6 +49,8 @@
 
   <br>
 
+  <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+
   <form>
     <label for="res">Results:</label><br>
     <textarea id="res" name="res" rows="30" cols="50"></textarea><br>
@@ -69,8 +72,8 @@ function displayNeuron(){
   document.getElementById('synapses').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].R;
   document.getElementById('synapses').length=0;
   for (let i=0;i<globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].OutSyns.length;i++){
-      var newOption1 = new Option("Synapse "+ i.toString(),globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].OutSyns[i]);
-      document.getElementById('synapses').add(newOption1,undefined);
+    var newOption1 = new Option("Synapse "+ i.toString(),globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].OutSyns[i]);
+    document.getElementById('synapses').add(newOption1,undefined);
   }
 
 }
@@ -84,6 +87,83 @@ function applyneurchanges(){
   globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].Vthresh=parseFloat(document.getElementById('vthresh').value);
   globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].C=parseFloat(document.getElementById('c').value);
   globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].R=parseFloat(document.getElementById('r').value);
+}
+</script>
+
+
+<script>
+// check how to add datasets dynamically
+var myChart=new Chart("myChart", {
+  type: "line",
+  data: {
+    labels: [],
+    datasets: [{
+      label:"",
+      fill: false,
+      pointRadius: 0,
+      data:[],
+      borderColor: "red",
+      cubicInterpolationMode:"no",
+    },
+    {
+      label:"",
+      fill: false,
+      pointRadius: 0,
+      data:[],
+      borderColor: "green",
+      cubicInterpolationMode:"no",
+    },
+    {
+      label:"",
+      fill: false,
+      pointRadius: 0,
+      data:[],
+      borderColor: "blue",
+      cubicInterpolationMode:"no",
+    },
+    {
+      label:"",
+      fill: false,
+      pointRadius: 0,
+      data:[],
+      borderColor: "black",
+      cubicInterpolationMode:"no",
+    },
+    {
+      label:"",
+      fill: false,
+      pointRadius: 0,
+      data:[],
+      borderColor: "yellow",
+      cubicInterpolationMode:"no",
+    }
+  ]
+  },
+  options: {
+    legend: {display: true},
+    animation: {duration: 0}
+  }
+});
+
+</script>
+
+<script>
+
+function drawGraph(){
+
+  myChart.data.labels=xdata;
+  //myChart.data.datasets.length=0;
+  for (let i=0;i<globalnet.Neurons.length;i++){
+    myChart.data.datasets[i].data=simuldata[i];
+    myChart.data.datasets[i].label="Neuron "+i.toString();
+    myChart.data.datasets[i].fill=false;
+    myChart.data.datasets[i].pointRadius=0;
+    myChart.data.datasets[i].borderColor= colors[i];
+    myChart.data.datasets[i].cubicInterpolationMode="no";
+  }
+  myChart.update();
+  //var xValues = [0 1 2 3 4 5];
+
 }
 </script>
 
