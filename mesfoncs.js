@@ -1,34 +1,28 @@
 const eNeuron = require('./eNeuron.js');
 const eSyn = require('./eSyn.js');
+const neuralNet = require('./neuralNet.js');
 
-function littleSim(){
-  leI=parseFloat(document.getElementById('i').value);
+function runGlobalNet(){
+
+  console.log("Starting simulation")
+  //leI=parseFloat(document.getElementById('i').value);
+
   document.getElementById('res').value="";
-
-  let letext="Time, V1, V2, I12, I21\n";
-
-  n1=new eNeuron();
-  n2=new eNeuron();
-
-  n1.connectTo(n2);
-  n2.connectTo(n1);
-  n2.OutSyns[0].I0=-0.02;
-  n2.OutSyns[0].tau=15;
-
+  let letext="";
 
   let dt=0.02;
   var t=0;
 
   var startTime = performance.now()
 
-  for (i=0;i<20/dt;i++){
+  for (let k=0;k<20/dt;k++){
     t+=dt;
-    n1.computeIsyn();
-    n2.computeIsyn();
-    n1.update(leI,dt);
-    n2.update(0,dt);
-    //console.log(t+" "+n1.V+" "+n2.V+" "+n1.OutSyns[0].I+" "+n2.OutSyns[0].I);
-    letext=letext+(Math.round(t * 100) / 100).toFixed(2)+" "+(Math.round(n1.V * 100) / 100).toFixed(2)+" "+(Math.round(n2.V * 100) / 100).toFixed(2)+" "+(Math.round(n1.OutSyns[0].I * 1000) / 1000).toFixed(3)+" "+(Math.round(n2.OutSyns[0].I * 1000) / 1000).toFixed(3)+"\n"
+    letext=letext+(Math.round(t * 100) / 100).toFixed(2)+" ";
+    globalnet.update(dt);
+    for (i=0;i<globalnet.Neurons.length;i++){
+      letext=letext+(Math.round(globalnet.Neurons[i].V * 100) / 100).toFixed(2)+" ";
+    }
+    letext=letext+"\n"
   }
 
   var endTime = performance.now()
@@ -36,6 +30,28 @@ function littleSim(){
   console.log(`Simulation took ${endTime - startTime} milliseconds`)
 
   document.getElementById('res').value=letext;
-  //console.log(window)
+  console.log(window)
 }
-module.exports = { littleSim };
+
+
+function addtoglobnet(){
+  globalnet.addNeuron(new eNeuron());
+  var selectBox1=document.getElementById('listn1');
+  var selectBox2=document.getElementById('listn2');
+  console.log(globalnet);
+  let newOption1 = new Option("Neuron "+globalnet.Neurons.length.toString(),globalnet.Neurons[globalnet.Neurons.length-1]);
+  selectBox1.add(newOption1,undefined);
+  let newOption2 = new Option("Neuron "+globalnet.Neurons.length.toString(),globalnet.Neurons[globalnet.Neurons.length-1]);
+  selectBox2.add(newOption2,undefined);
+  displayNeuron()
+}
+
+function addSynapse(){
+  var n1=globalnet.Neurons[(document.getElementById('listn1').selectedIndex)];
+  var n2=globalnet.Neurons[(document.getElementById('listn2').selectedIndex)];
+  n1.connectTo(n2);
+  console.log(globalnet);
+  displayNeuron()
+}
+
+module.exports = { addtoglobnet, runGlobalNet,addSynapse};

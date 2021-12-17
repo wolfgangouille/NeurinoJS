@@ -5,6 +5,7 @@ module.exports = class eNeuron {
 	constructor(){
 		this.V=0;
 		this.Isyn=0;
+		this.Iext=0;
 		this.Vrest=0.5;
 		this.Vreset=-1;
 		this.Vthresh=1;
@@ -18,9 +19,9 @@ module.exports = class eNeuron {
 			neuron.InSyns.push(this.OutSyns[this.OutSyns.length-1])
 		}
 
-		this.update=function(Iext,dt){
+		this.update=function(dt){
 			this.OutSyns.forEach((syn, i) => syn.update(dt));
-			this.V+=((Iext+this.Isyn+((this.Vrest-this.V)/this.R))/this.C)*dt;
+			this.V+=((this.Iext+this.Isyn+((this.Vrest-this.V)/this.R))/this.C)*dt;
 			if (this.V>this.Vthresh){
 				this.V=this.Vreset;
 				this.OutSyns.forEach((syn, i) => syn.fire());

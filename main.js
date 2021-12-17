@@ -3,9 +3,15 @@
 
 const eNeuron = require('./eNeuron.js');
 const eSyn = require('./eSyn.js');
+const neuralNet = require('./neuralNet.js');
 const mesfoncs = require('./mesfoncs.js');
-maSim=mesfoncs.littleSim; //need to instantiate the function !!!
+
+addtoglobnet=mesfoncs.addtoglobnet;
+runGlobalNet=mesfoncs.runGlobalNet;
+addSynapse=mesfoncs.addSynapse;
 //mafonc();
+globalnet=new neuralNet();
+
 console.log(window)
 //console.log(n1);
 //console.log(n2);

@@ -7,17 +7,84 @@
 </head>
 <body>
   <!-- lots of HTML here -->
+
+
+
+  <br>
+  <button onclick="runGlobalNet()">Run simulation</button>
+  <button onclick="addtoglobnet()">Add Neuron</button>
+  <button onclick="addSynapse()">Add Synapse A->B</button>
+  <br>
+  <br>
   <form>
-    <label for="i">Input Current:</label><br>
-    <input type="text" id="i" name="i" value=0.0><br>
+    <label for="listn1">Neuron A :</label>
+    <label for="listn2">Neuron B :</label><br>
+    <select id="listn1" name="listn1" onchange="displayNeuron()"></select>
+    <select id="listn2" name="listn2"></select>
   </form>
   <br>
-  <button onclick="maSim()">Run simulation</button>
+
+  <form>Neuron A Properties :<br>
+    <label for="iext">Input Current:</label>
+    <input type="text" id="iext" name="iext" value=""></input><br>
+    <label for="vrest">Resting Potential:</label>
+    <input type="text" id="vrest" name="vrest" value=""></input><br>
+    <label for="vreset">Reset Potential:</label>
+    <input type="text" id="vreset" name="vreset" value=""></input><br>
+    <label for="vthresh">Reset Potential:</label>
+    <input type="text" id="vthresh" name="vthresh" value=""></input><br>
+    <label for="c">Capacitance:</label>
+    <input type="text" id="c" name="c" value=""></input><br>
+    <label for="r">Resistance:</label>
+    <input type="text" id="r" name="r" value=""></input><br>
+    <label for="synapses">Outgoing Synapses:</label>
+    <select id="synapses" name="synapses" value=""></select><br>
+  </form>
+
   <br>
+
+  <button onclick="applyneurchanges()">Apply Changes</button>
+
+  <br>
+
   <form>
     <label for="res">Results:</label><br>
-    <textarea id="res" name="res" rows="30" cols="100"></textarea><br>
+    <textarea id="res" name="res" rows="30" cols="50"></textarea><br>
   </form>
+
+
+  <script>function doSomth(){
+    console.log("blablabli")
+  }
+</script>
+<script>
+function displayNeuron(){
+  document.getElementById('iext').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].Iext;
+  document.getElementById('vrest').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].Vrest;
+  document.getElementById('vreset').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].Vreset;
+  document.getElementById('vthresh').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].Vthresh;
+  document.getElementById('c').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].C;
+  document.getElementById('r').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].R;
+  document.getElementById('synapses').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].R;
+  document.getElementById('synapses').length=0;
+  for (let i=0;i<globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].OutSyns.length;i++){
+      var newOption1 = new Option("Synapse "+ i.toString(),globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].OutSyns[i]);
+      document.getElementById('synapses').add(newOption1,undefined);
+  }
+
+}
+</script>
+
+<script>
+function applyneurchanges(){
+  globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].Iext=parseFloat(document.getElementById('iext').value);
+  globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].Vrest=parseFloat(document.getElementById('vrest').value);
+  globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].Vreset=parseFloat(document.getElementById('vreset').value);
+  globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].Vthresh=parseFloat(document.getElementById('vthresh').value);
+  globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].C=parseFloat(document.getElementById('c').value);
+  globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].R=parseFloat(document.getElementById('r').value);
+}
+</script>
 
 </body>
 </html>
