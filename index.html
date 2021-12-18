@@ -96,17 +96,17 @@ function applyneurchanges(){
 var myChart=new Chart("myChart", {
   type: "line",
   data: {},
-options: {
-  //legend: {display: true},
-  scaleFontColor: 'red',
-  animation: {duration: 0},
-  scales:{
-    yAxes:[{
-      Min: 50,
-      Max: 100
-    }],
-  },
-}
+  options: {
+    //legend: {display: true},
+    scaleFontColor: 'red',
+    animation: {duration: 0},
+    scales:{
+      yAxes:[{
+        Min: 50,
+        Max: 100
+      }],
+    },
+  }
 });
 
 </script>
@@ -144,33 +144,31 @@ function drawGraph(){
     myChart.data.datasets[i].cubicInterpolationMode="no";
   }
   myChart.options = {
-  legend: {display: true},
-  animation: {duration: 0},
-  scales: {
-    yAxes: [{
-      display: true,
-      ticks: {
-        maxTicksLimit: 5,
-        beginAtZero: false,
-        min: -2,
-        max: 2,
-        stepSize: 0.5
-       }
-    }],
-    xAxes: [{
-      display: true,
-      ticks: {
-        userCallback: function(label, index, labels) {
-                     // when the floored value is the same as the value we have a whole number
-
-                         return (Math.round(label*100)/100);
-
-                   },
-        maxTicksLimit: 10,
-      }
-    }]
+    legend: {display: true},
+    animation: {duration: 0},
+    scales: {
+      yAxes: [{
+        display: true,
+        ticks: {
+          maxTicksLimit: 5,
+          beginAtZero: false,
+          min: -2,
+          max: 2,
+          stepSize: 0.5
+        }
+      }],
+      xAxes: [{
+        display: true,
+        ticks: {
+          userCallback: function(label, index, labels) {
+            // when the floored value is the same as the value we have a whole number
+            return (Math.round(label*100)/100);
+          },
+          maxTicksLimit: 10,
+        }
+      }]
+    }
   }
-}
   myChart.update();
   //var xValues = [0 1 2 3 4 5];
 
