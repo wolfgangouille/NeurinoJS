@@ -218,6 +218,9 @@
 									this.update=function(dt){
 										this.OutSyns.forEach((syn, i) => syn.update(dt));
 
+										this.V_thresh=(this.Vccp/this.R_Na_thresh+this.Vccm/this.R_K_thresh)/(1/this.R_Na_thresh+1/this.R_K_thresh); //V
+
+
 										this.V+=((this.Iext+this.Isyn)/this.C_v)*dt;
 
 										if (this.V>=this.V_thresh) {
