@@ -23,7 +23,7 @@
 	};
 	resolve = function (scope, tree, path, fullPath, state, id) {
 		var name, dir, exports, module, fn, found, ext;
-		path = path.split('/');
+		path = path.split(/[\\/]/);
 		name = path.pop();
 		if ((name === '.') || (name === '..')) {
 			path.push(name);
@@ -112,302 +112,406 @@
 	return getRequire(modules, [], '');
 })
 ({
-	"/": {
-		"Users": {
-			"renaud": {
-				"Desktop": {
-					"NeurinoJS": {
-						"eNeuron.js": function (exports, module, require) {
-							
-							const eSyn = require('./eSyn.js');
-
-							/*Vccp=5; //V
-							Vccm=-5; //V
-
-							v=0; //V
-							u=0; //V
-
-							C_v=1e-6; //F
-							C_u=1e-7; //F
-
-							R_Na_leak=100e3; //Ohm
-							R_K_leak=100e3; //Ohm
-
-							R_Na_on=10e3; //Ohm
-							R_K_on=20e3; //Ohm
-
-
-							R_Na_thresh=90e3; //Ohm
-							R_K_thresh=100e3; //Ohm
-
-							v_thresh=(Vccp/R_Na_thresh+Vccm/R_K_thresh)/(1/R_Na_thresh+1/R_K_thresh); //V
-
-							R_delay_up=10e3;  //Ohm
-							R_delay_down=10e3; //Ohm
-
-							i=0; //amp
-
-							int1=1; //boolean
-							int2=0;
-							int3=0;
-							int4=0;
-
-							//v is controlled by 1, 2 and 3.
-							//u is controlled by 4
-							//2 and 4 are controlled by v.
-							//1 and 3 are controlled by u.
-
-							threshyst=0;*/
-
-
-							module.exports = class eNeuron {
-								constructor(){
-
-									this.Isyn=0;
-									this.Iext=0;
-
-									this.type="eNeuron";
-
-									this.Vccp=5; //V
-									this.Vccm=-5; //V
-
-									this.V=0; //V
-									this.U=0; //V
-
-									this.C_v=1e-6; //F
-									this.C_u=1e-7; //F
-
-									this.R_Na_leak=100e3; //Ohm
-									this.R_K_leak=100e3; //Ohm
-
-									this.R_Na_on=10e3; //Ohm
-									this.R_K_on=20e3; //Ohm
-
-
-									this.R_Na_thresh=90e3; //Ohm
-									this.R_K_thresh=100e3; //Ohm
-
-									this.V_thresh=(this.Vccp/this.R_Na_thresh+this.Vccm/this.R_K_thresh)/(1/this.R_Na_thresh+1/this.R_K_thresh); //V
-
-									this.R_delay_up=10e3;  //Ohm
-									this.R_delay_down=10e3; //Ohm
-
-									this.i=0; //amp
-
-									this.int1=1; //boolean
-									this.int2=0;
-									this.int3=0;
-									this.int4=0;
-
-									//v is controlled by 1, 2 and 3.
-									//u is controlled by 4
-									//2 and 4 are controlled by v.
-									//1 and 3 are controlled by u.
-
-									this.threshyst=0;
-
-									this.OutSyns=[];
-									this.InSyns=[];
-
-
-									this.connectTo=function(neuron){
-										this.OutSyns.push(new eSyn(neuron))
-										neuron.InSyns.push(this.OutSyns[this.OutSyns.length-1])
-									}
-
-									this.update=function(dt){
-										this.OutSyns.forEach((syn, i) => syn.update(dt));
-
-										this.V_thresh=(this.Vccp/this.R_Na_thresh+this.Vccm/this.R_K_thresh)/(1/this.R_Na_thresh+1/this.R_K_thresh); //V
-
-
-										this.V+=((this.Iext+this.Isyn)/this.C_v)*dt;
-
-										if (this.V>=this.V_thresh) {
-											this.int2=1;
-											this.int4=1;
-											this.fire();
-										}
-										else {
-											this.int2=0;
-											this.int4=0;
-										}
-
-										if (this.U>0+(Math.sign(this.int1-0.5)*(this.threshyst))) { //Symmetrical hysteresis
-											this.int1=0;
-											this.int3=1;
-										}
-										else {
-											this.int1=1;
-											this.int3=0;
-										}
-
-										var g_v_plus=1/this.R_Na_leak+(this.int1*this.int2)/this.R_Na_on;
-										var g_v_moins=1/this.R_K_leak+(this.int3)/this.R_K_on;
-
-										var g_u_plus=this.int4/this.R_delay_up;
-										var g_u_moins=(1-this.int4)/this.R_delay_down;
-
-										//double vold=v;
-
-										//v=v+(dt/C_v)*(g_v_plus*(Vccp-vold)+g_v_moins*(Vccm-vold));
-
-										this.V=this.V+(this.Vccp-this.V)*(1-Math.exp(-dt*g_v_plus/this.C_v))+(this.Vccm-this.V)*(1-Math.exp(-dt*g_v_moins/this.C_v));
-
-										//u=u+(dt/C_u)*(g_u_plus*(Vccp-u)+g_u_moins*(Vccm-u));
-										this.U=this.U+(this.Vccp-this.U)*(1-Math.exp(-dt*g_u_plus/this.C_u))+(this.Vccm-this.U)*(1-Math.exp(-dt*g_u_moins/this.C_u));
-
-									}
-
-
-									this.computeIsyn=function(){
-										this.Isyn=0;
-										for (const syn of this.InSyns) { this.Isyn+=syn.I }
-									}
-
-
-									this.fire=function(){
-										this.OutSyns.forEach((syn, i) => syn.fire());
-										//this.OutSyns.forEach((syn, i) => syn.prefire=true;
-										//this.InSyns.forEach((syn, i) => syn.postfire=true;
-									}
-								}
-							}
-						},
-						"eSyn.js": function (exports, module, require) {
-							module.exports = class eSyn {
-								constructor(neuron){
-									this.I=0;
-									this.I0=0.000001;
-									this.tau=0.1;
-									this.OutNeuron=neuron;
-									this.update=function(dt){
-										this.I=this.I*Math.exp(-dt/this.tau);
-									};
-									this.fire=function(){
-										this.I+=this.I0;
-									};
-								}
-							}
-						},
-						"main.js": function (exports, module, require) {
-							//const { performance } = require('perf_hooks'); //apparently no need to import it ?
-
-
-							const eNeuron = require('./eNeuron.js');
-							const eSyn = require('./eSyn.js');
-							const neuralNet = require('./neuralNet.js');
-							const mesfoncs = require('./mesfoncs.js');
-
-							addtoglobnet=mesfoncs.addtoglobnet;
-							runGlobalNet=mesfoncs.runGlobalNet;
-							addSynapse=mesfoncs.addSynapse;
-							//mafonc();
-							globalnet=new neuralNet();
-
-							console.log(window)
-							//console.log(n1);
-							//console.log(n2);
-						},
-						"mesfoncs.js": function (exports, module, require) {
-							const eNeuron = require('./eNeuron.js');
-							const eSyn = require('./eSyn.js');
-							const neuralNet = require('./neuralNet.js');
-
-							function runGlobalNet(){
-							  applyneurchanges()
-							  xdata=[];
-							  simuldata=[]; //fix bug here to have unlimited neurons
-							  for (let i=0;i<globalnet.Neurons.length;i++){
-							    simuldata.push([]);
-							  }
-							  console.log("Starting simulation")
-							  //leI=parseFloat(document.getElementById('i').value);
-
-							  document.getElementById('res').value="";
-							  let letext="";
-
-							  let dt=0.005;
-							  var t=0;
-
-							  var startTime = performance.now()
-
-							  for (let k=0;k<1/dt;k++){
-							    t+=dt;
-							    letext=letext+(Math.round(t * 100) / 100).toFixed(2)+" ";
-							    xdata.push((Math.round(t * 100) / 100));
-							    //simuldata[0].push(globalnet.Neurons[0].V);
-							    //simuldata[1].push(globalnet.Neurons[1].V);
-							    //simuldata[2].push(globalnet.Neurons[1].V);
-							    globalnet.update(dt);
-							    for (let i=0;i<globalnet.Neurons.length;i++){
-							      letext=letext+(Math.round(globalnet.Neurons[i].V * 100) / 100).toFixed(2)+" ";
-							      simuldata[i].push(globalnet.Neurons[i].V);
-							    }
-							    letext=letext+"\n"
-
-
-							  }
-
-							  var endTime = performance.now()
-
-							  console.log(`Simulation took ${endTime - startTime} milliseconds`)
-
-							  document.getElementById('res').value=letext;
-							  console.log(window)
-							  drawGraph();
-							}
-
-
-
-
-
-
-
-							function addtoglobnet(){
-							  globalnet.addNeuron(new eNeuron());
-							  var selectBox1=document.getElementById('listn1');
-							  var selectBox2=document.getElementById('listn2');
-							  console.log(globalnet);
-							  let newOption1 = new Option("Neuron "+globalnet.Neurons.length.toString(),globalnet.Neurons[globalnet.Neurons.length-1]);
-							  selectBox1.add(newOption1,undefined);
-							  let newOption2 = new Option("Neuron "+globalnet.Neurons.length.toString(),globalnet.Neurons[globalnet.Neurons.length-1]);
-							  selectBox2.add(newOption2,undefined);
-							  displayNeuron()
-							}
-
-							function addSynapse(){
-							  var n1=globalnet.Neurons[(document.getElementById('listn1').selectedIndex)];
-							  var n2=globalnet.Neurons[(document.getElementById('listn2').selectedIndex)];
-							  n1.connectTo(n2);
-							  console.log(globalnet);
-							  displayNeuron()
-							}
-
-							module.exports = { addtoglobnet, runGlobalNet,addSynapse};
-						},
-						"neuralNet.js": function (exports, module, require) {
-							module.exports = class neuralNet {
-								constructor(){
-									this.Neurons=[];
-									this.addNeuron=function(neuron){
-										this.Neurons.push(neuron);
-									};
-									this.update=function(dt){
-										for (let i=0;i<this.Neurons.length;i++){
-											this.Neurons[i].computeIsyn();
-											this.Neurons[i].update(dt);
-											//console.log(t+" "+n1.V+" "+n2.V+" "+n1.OutSyns[0].I+" "+n2.OutSyns[0].I);
-
-										}
-
-									};
-								}
-							}
+	"Desktop": {
+		"NeurinoJS": {
+			"eNeuron.js": function (exports, module, require) {
+				
+				const eSyn = require('./eSyn.js');
+				
+				/*Vccp=5; //V
+				Vccm=-5; //V
+				
+				v=0; //V
+				u=0; //V
+				
+				C_v=1e-6; //F
+				C_u=1e-7; //F
+				
+				R_Na_leak=100e3; //Ohm
+				R_K_leak=100e3; //Ohm
+				
+				R_Na_on=10e3; //Ohm
+				R_K_on=20e3; //Ohm
+				
+				
+				R_Na_thresh=90e3; //Ohm
+				R_K_thresh=100e3; //Ohm
+				
+				v_thresh=(Vccp/R_Na_thresh+Vccm/R_K_thresh)/(1/R_Na_thresh+1/R_K_thresh); //V
+				
+				R_delay_up=10e3;  //Ohm
+				R_delay_down=10e3; //Ohm
+				
+				i=0; //amp
+				
+				int1=1; //boolean
+				int2=0;
+				int3=0;
+				int4=0;
+				
+				//v is controlled by 1, 2 and 3.
+				//u is controlled by 4
+				//2 and 4 are controlled by v.
+				//1 and 3 are controlled by u.
+				
+				threshyst=0;*/
+				
+				
+				module.exports = class eNeuron {
+					constructor(){
+				
+						this.Isyn=0;
+						this.Iext=0;
+				
+						this.type="eNeuron";
+				
+						this.Vccp=5; //V
+						this.Vccm=-5; //V
+				
+						this.V=0; //V
+						this.U=0; //V
+				
+						this.C_v=1e-6; //F
+						this.C_u=1e-7; //F
+				
+						this.R_Na_leak=100e3; //Ohm
+						this.R_K_leak=100e3; //Ohm
+				
+						this.R_Na_on=10e3; //Ohm
+						this.R_K_on=20e3; //Ohm
+				
+				
+						this.R_Na_thresh=90e3; //Ohm
+						this.R_K_thresh=100e3; //Ohm
+				
+						this.V_thresh=(this.Vccp/this.R_Na_thresh+this.Vccm/this.R_K_thresh)/(1/this.R_Na_thresh+1/this.R_K_thresh); //V
+				
+						this.R_delay_up=10e3;  //Ohm
+						this.R_delay_down=10e3; //Ohm
+				
+						this.i=0; //amp
+				
+						this.int1=1; //boolean
+						this.int2=0;
+						this.int3=0;
+						this.int4=0;
+				
+						//v is controlled by 1, 2 and 3.
+						//u is controlled by 4
+						//2 and 4 are controlled by v.
+						//1 and 3 are controlled by u.
+				
+						this.threshyst=0;
+				
+						this.OutSyns=[];
+						this.InSyns=[];
+				
+				
+						this.connectTo=function(neuron){
+							this.OutSyns.push(new eSyn(neuron))
+							neuron.InSyns.push(this.OutSyns[this.OutSyns.length-1])
 						}
+				
+						this.update=function(dt){
+							this.OutSyns.forEach((syn, i) => syn.update(dt));
+				
+							this.V_thresh=(this.Vccp/this.R_Na_thresh+this.Vccm/this.R_K_thresh)/(1/this.R_Na_thresh+1/this.R_K_thresh); //V
+				
+				
+							this.V+=((this.Iext+this.Isyn)/this.C_v)*dt;
+				
+							if (this.V>=this.V_thresh) {
+								this.int2=1;
+								this.int4=1;
+								this.fire();
+							}
+							else {
+								this.int2=0;
+								this.int4=0;
+							}
+				
+							if (this.U>0+(Math.sign(this.int1-0.5)*(this.threshyst))) { //Symmetrical hysteresis
+								this.int1=0;
+								this.int3=1;
+							}
+							else {
+								this.int1=1;
+								this.int3=0;
+							}
+				
+							var g_v_plus=1/this.R_Na_leak+(this.int1*this.int2)/this.R_Na_on;
+							var g_v_moins=1/this.R_K_leak+(this.int3)/this.R_K_on;
+				
+							var g_u_plus=this.int4/this.R_delay_up;
+							var g_u_moins=(1-this.int4)/this.R_delay_down;
+				
+							//double vold=v;
+				
+							//v=v+(dt/C_v)*(g_v_plus*(Vccp-vold)+g_v_moins*(Vccm-vold));
+				
+							this.V=this.V+(this.Vccp-this.V)*(1-Math.exp(-dt*g_v_plus/this.C_v))+(this.Vccm-this.V)*(1-Math.exp(-dt*g_v_moins/this.C_v));
+				
+							//u=u+(dt/C_u)*(g_u_plus*(Vccp-u)+g_u_moins*(Vccm-u));
+							this.U=this.U+(this.Vccp-this.U)*(1-Math.exp(-dt*g_u_plus/this.C_u))+(this.Vccm-this.U)*(1-Math.exp(-dt*g_u_moins/this.C_u));
+				
+						}
+				
+				
+						this.computeIsyn=function(){
+							this.Isyn=0;
+							for (const syn of this.InSyns) { this.Isyn+=syn.I }
+						}
+				
+				
+						this.fire=function(){
+							this.OutSyns.forEach((syn, i) => syn.fire());
+							//this.OutSyns.forEach((syn, i) => syn.prefire=true;
+							//this.InSyns.forEach((syn, i) => syn.postfire=true;
+						}
+					}
+				}
+			},
+			"eSyn.js": function (exports, module, require) {
+				module.exports = class eSyn {
+					constructor(neuron){
+						this.I=0;
+						this.I0=0.000001;
+						this.tau=0.1;
+						this.preFire = false;
+						this.postFire = false;
+						this.OutNeuron=neuron;
+				
+						this.VT=1.1; //mosfet threshold in Volt
+						this.S1=5;  //positive for excitatory synapses
+						this.S2=-5;
+				
+						this.VG=this.S1;
+						this.U_stock=this.S2;
+						this.R_w=200e3;
+						this.C_stock=1e-9;
+						this.R_replen=1;
+						this.R_up=50e3;
+						this.R_decay=100e3;
+						this.C_speed=1e-7;
+				
+				
+				
+				
+					this.update=function(dt){
+						//this.I=this.I*Math.exp(-dt/this.tau);
+				
+						var VG_old=this.VG;
+				
+				
+						if (this.preFire){
+							this.VG=this.VG+(this.S1-this.VG)*(1-Math.exp(-dt/(this.C_speed*this.R_decay)))+(this.U_stock-this.VG)*(1-Math.exp(-dt/(this.C_speed*this.R_up)));
+							this.U_stock=this.U_stock+(this.S2-this.U_stock)*(1-Math.exp(-dt/(this.C_stock*this.R_replen)))+(VG_old-this.U_stock)*(1-Math.exp(-dt/(this.C_stock*this.R_up)));;
+						}
+						else {
+							this.VG=this.VG+(this.S1-this.VG)*(1-Math.exp(-dt/(this.C_speed*this.R_decay)));
+							this.U_stock=this.U_stock+(this.S2-this.U_stock)*(1-Math.exp(-dt/(this.C_stock*this.R_replen)));
+						}
+				
+				
+						if (this.S1>0) {
+							this.I=Math.max(this.S1-this.VG-this.VT,0)/this.R_w; //if S1 est +
+						}
+						else {
+							this.I=Math.min(this.S1-this.VG-this.VT,0)/this.R_w; //if S1 est -
+						}
+						this.preFire=false;
+						this.postFire=false;
+				
+					};
+				
+				
+					this.fire=function(){
+						this.I+=this.I0;
+					};
+				
+					this.setPolarity=function(t) {
+						switch(t) {
+							case '+':
+							this.S1=5;
+							this.S2=-5;
+							this.VT=1.1;
+							break;
+				
+							case '-':
+							this.S1=-5;
+							this.S2=5;
+							this.VT=-1.1;
+							break;
+				
+							default:
+							this.S1=5;
+							this.S2=-5;
+							this.VT=1.1;
+						}
+					}
+				
+					this.setType=function(t) {
+						switch(t) {
+							case 'A':
+							this.C_stock=1e-9;
+							this.R_replen=1;
+							this.R_up=50e3;
+							this.R_decay=100e3;
+							this.C_speed=1e-7;
+							break;
+				
+							case 'B':
+							this.C_stock=1e-6;
+							this.R_replen=500e3;
+							this.R_up=50e3;
+							this.R_decay=100e3;
+							this.C_speed=1e-7;
+							break;
+				
+							case 'C':
+							this.C_stock=1e-9;
+							this.R_replen=1;
+							this.R_up=20e3;
+							this.R_decay=100e3;
+							this.C_speed=1e-6;
+							break;
+				
+							case 'D':
+							this.C_stock=1e-6;
+							this.R_replen=500e3;
+							this.R_up=10e3;
+							this.R_decay=100e3;
+							this.C_speed=1e-6;
+							break;
+				
+							default:
+							console.log("Invalid type, setting to A");
+							this.C_stock=1e-9;
+							this.R_replen=1;
+							this.R_up=50e3;
+							this.R_decay=100e3;
+							this.C_speed=1e-7;
+				
+						}
+					}
+				}
+				}
+			},
+			"main.js": function (exports, module, require) {
+				//const { performance } = require('perf_hooks'); //apparently no need to import it ?
+				
+				
+				const eNeuron = require('./eNeuron.js');
+				const eSyn = require('./eSyn.js');
+				const neuralNet = require('./neuralNet.js');
+				const mesfoncs = require('./mesfoncs.js');
+				
+				addtoglobnet=mesfoncs.addtoglobnet;
+				runGlobalNet=mesfoncs.runGlobalNet;
+				addSynapse=mesfoncs.addSynapse;
+				//mafonc();
+				globalnet=new neuralNet();
+				
+				console.log(window)
+				//console.log(n1);
+				//console.log(n2);
+			},
+			"mesfoncs.js": function (exports, module, require) {
+				const eNeuron = require('./eNeuron.js');
+				const eSyn = require('./eSyn.js');
+				const neuralNet = require('./neuralNet.js');
+				
+				function runGlobalNet(){
+				  applyneurchanges()
+				  xdata=[];
+				  simuldata=[]; //fix bug here to have unlimited neurons
+				  for (let i=0;i<globalnet.Neurons.length;i++){
+				    simuldata.push([]);
+				  }
+				  console.log("Starting simulation")
+				  //leI=parseFloat(document.getElementById('i').value);
+				
+				  document.getElementById('res').value="";
+				  let letext="";
+				
+				  let dt=0.005;
+				  var t=0;
+				
+				  var startTime = performance.now()
+				
+				  for (let k=0;k<1/dt;k++){
+				    t+=dt;
+				    letext=letext+(Math.round(t * 100) / 100).toFixed(2)+" ";
+				    xdata.push((Math.round(t * 100) / 100));
+				    //simuldata[0].push(globalnet.Neurons[0].V);
+				    //simuldata[1].push(globalnet.Neurons[1].V);
+				    //simuldata[2].push(globalnet.Neurons[1].V);
+				    globalnet.update(dt);
+				    for (let i=0;i<globalnet.Neurons.length;i++){
+				      letext=letext+(Math.round(globalnet.Neurons[i].V * 100) / 100).toFixed(2)+" ";
+				      simuldata[i].push(globalnet.Neurons[i].V);
+				    }
+				    letext=letext+"\n"
+				
+				
+				  }
+				
+				  var endTime = performance.now()
+				
+				  console.log(`Simulation took ${endTime - startTime} milliseconds`)
+				
+				  document.getElementById('res').value=letext;
+				  console.log(window)
+				  drawGraph();
+				}
+				
+				
+				
+				
+				
+				
+				
+				function addtoglobnet(){
+				  globalnet.addNeuron(new eNeuron());
+				  var selectBox1=document.getElementById('listn1');
+				  var selectBox2=document.getElementById('listn2');
+				  console.log(globalnet);
+				  let newOption1 = new Option("Neuron "+globalnet.Neurons.length.toString(),globalnet.Neurons[globalnet.Neurons.length-1]);
+				  selectBox1.add(newOption1,undefined);
+				  let newOption2 = new Option("Neuron "+globalnet.Neurons.length.toString(),globalnet.Neurons[globalnet.Neurons.length-1]);
+				  selectBox2.add(newOption2,undefined);
+				  displayNeuron()
+				}
+				
+				function addSynapse(){
+				  var n1=globalnet.Neurons[(document.getElementById('listn1').selectedIndex)];
+				  var n2=globalnet.Neurons[(document.getElementById('listn2').selectedIndex)];
+				  n1.connectTo(n2);
+				  console.log(globalnet);
+				  displayNeuron()
+				}
+				
+				module.exports = { addtoglobnet, runGlobalNet,addSynapse};
+			},
+			"neuralNet.js": function (exports, module, require) {
+				module.exports = class neuralNet {
+					constructor(){
+						this.Neurons=[];
+						this.addNeuron=function(neuron){
+							this.Neurons.push(neuron);
+						};
+						this.update=function(dt){
+							for (let i=0;i<this.Neurons.length;i++){
+								this.Neurons[i].computeIsyn();
+								this.Neurons[i].update(dt);
+								//console.log(t+" "+n1.V+" "+n2.V+" "+n1.OutSyns[0].I+" "+n2.OutSyns[0].I);
+				
+							}
+				
+						};
 					}
 				}
 			}
 		}
 	}
-})("/Users/renaud/Desktop/NeurinoJS/main");
+})("Desktop/NeurinoJS/main");
