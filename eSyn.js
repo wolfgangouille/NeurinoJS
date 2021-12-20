@@ -1,8 +1,8 @@
 module.exports = class eSyn {
 	constructor(neuron){
 		this.I=0;
-		this.I0=0.9;
-		this.tau=0.5;
+		this.I0=0.000001;
+		this.tau=0.1;
 		this.OutNeuron=neuron;
 		this.update=function(dt){
 			this.I=this.I*Math.exp(-dt/this.tau);

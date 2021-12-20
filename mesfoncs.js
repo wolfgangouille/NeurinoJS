@@ -15,12 +15,12 @@ function runGlobalNet(){
   document.getElementById('res').value="";
   let letext="";
 
-  let dt=0.02;
+  let dt=0.005;
   var t=0;
 
   var startTime = performance.now()
 
-  for (let k=0;k<20/dt;k++){
+  for (let k=0;k<1/dt;k++){
     t+=dt;
     letext=letext+(Math.round(t * 100) / 100).toFixed(2)+" ";
     xdata.push((Math.round(t * 100) / 100));

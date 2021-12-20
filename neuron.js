@@ -9,6 +9,7 @@ module.exports = class neuron {
     this.InSyns=[];
     this.OutSyns=[];
     this.type="";
+    this.Isyn=0;
 
     this.update=function(dt){}; //implemented in extended neuron classes
 
