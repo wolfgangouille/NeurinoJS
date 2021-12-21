@@ -18,129 +18,174 @@
   <button onclick="addSynapse()">Add Synapse A->B</button>
   <br>
   <br>
-  <form>
-    <label for="listn1">Neuron A :</label>
-    <label for="listn2">Neuron B :</label><br>
-    <select id="listn1" name="listn1" onchange="displayNeuron()"></select>
-    <select id="listn2" name="listn2"></select>
-  </form>
+
+  <table>
+    <tr>
+      <td style="width:100px"><label for="listn1"><b><center>Neuron A :</b></center></label></td>
+      <td style="width:100px"><label for="listn2"><b><center>Neuron B :</b></center></label></td>
+    </tr>
+    <tr>
+      <td><center><select id="listn1" name="listn1" onchange="displayNeuron()"></select></center></td>
+      <td><center><select id="listn2" name="listn2" onchange="displayNeuron()"></select></center></td>
+    </tr>
+  </table>
+  <br>
+  <table>
+    <tr>
+      <td style="width:200px"><b>Neuron A properties</b></td>
+      <td style="width:200px"><b>Value</b></td>
+      <td style="width:200px"><b>Synapse A->B properties</b></td>
+      <td style="width:200px"><b>Value</b></td>
+    </tr>
+    <tr>
+      <td><label for="iext">Input Current:</label></td>
+      <td><input type="text" id="iext" name="iext" value=""></input></td>
+    </tr>
+    <tr>
+      <td><label for="R_Na_leak">R_Na_leak:</label></td>
+      <td><input type="text" id="R_Na_leak" name="R_Na_leak" value=""></input></input></td>
+    </tr>
+    <tr>
+      <td> <label for="R_K_leak">R_K_leak:</label></td>
+      <td><input type="text" id="R_K_leak" name="R_K_leak" value=""></input></td>
+    </tr>
+    <tr>
+      <td><label for="R_Na_on">R_Na_on:</label></td>
+      <td><input type="text" id="R_Na_on" name="R_Na_on" value=""></input></td>
+    </tr>
+    <tr>
+      <td><label for="R_K_on">R_K_on:</label></td>
+      <td><input type="text" id="R_K_on" name="R_K_on" value=""></input></td>
+    </tr>
+    <tr>
+      <td><label for="R_Na_thresh">R_Na_thresh:</label></td>
+      <td><input type="text" id="R_Na_thresh" name="R_Na_thresh" value=""></input></td>
+    </tr>
+    <tr>
+      <td><label for="R_K_thresh">R_K_thresh:</label></td>
+      <td><input type="text" id="R_K_thresh" name="R_K_thresh" value=""></input></td>
+    </tr>
+    <tr>
+      <td><label for="R_delay_up">R_delay_up:</label></td>
+      <td><input type="text" id="R_delay_up" name="R_delay_up" value=""></input></td>
+    </tr>
+    <tr>
+      <td><label for="R_delay_down">R_delay_down:</label></td>
+      <td><input type="text" id="R_delay_down" name="R_delay_down" value=""></input></td>
+    </tr>
+    <tr>
+      <td><label for="C_v">C_v:</label></td>
+      <td><input type="text" id="C_v" name="C_v" value=""></input></td>
+    </tr>
+    <tr>
+      <td><label for="C_u">C_u:</label></td>
+      <td><input type="text" id="C_u" name="C_u" value=""></input></td>
+    </tr>
+    <tr>
+      <td><label for="threshyst">threshyst:</label></td>
+      <td><input type="text" id="threshyst" name="threshyst" value=""></input></td>
+    </tr>
+    <tr>
+      <td><label for="synapses">Outgoing Synapses:</label></td>
+      <td><select id="synapses" name="synapses" value=""></select></td>
+    </tr>
+  </table>
   <br>
 
-  <form>Neuron A Properties :<br>
-    <label for="iext">Input Current:</label>
-    <input type="text" id="iext" name="iext" value=""></input><br>
-    <label for="R_Na_leak">R_Na_leak:</label>
-    <input type="text" id="R_Na_leak" name="R_Na_leak" value=""></input><br>
-    <label for="R_K_leak">R_K_leak:</label>
-    <input type="text" id="R_K_leak" name="R_K_leak" value=""></input><br>
-    <label for="R_Na_on">R_Na_on:</label>
-    <input type="text" id="R_Na_on" name="R_Na_on" value=""></input><br>
-    <label for="R_K_on">R_K_on:</label>
-    <input type="text" id="R_K_on" name="R_K_on" value=""></input><br>
-    <label for="R_Na_thresh">R_Na_thresh:</label>
-    <input type="text" id="R_Na_thresh" name="R_Na_thresh" value=""></input><br>
-    <label for="R_K_thresh">R_K_thresh:</label>
-    <input type="text" id="R_K_thresh" name="R_K_thresh" value=""></input><br>
-    <label for="R_delay_up">R_delay_up:</label>
-    <input type="text" id="R_delay_up" name="R_delay_up" value=""></input><br>
-    <label for="R_delay_down">R_delay_down:</label>
-    <input type="text" id="R_delay_down" name="R_delay_down" value=""></input><br>
-    <label for="C_v">C_v:</label>
-    <input type="text" id="C_v" name="C_v" value=""></input><br>
-    <label for="C_u">C_u:</label>
-    <input type="text" id="C_u" name="C_u" value=""></input><br>
-    <label for="threshyst">threshyst:</label>
-    <input type="text" id="threshyst" name="threshyst" value=""></input><br>
-    <label for="synapses">Outgoing Synapses:</label>
-    <select id="synapses" name="synapses" value=""></select><br>
-  </form>
 
   <br>
-
-  <button onclick="applyneurchanges()">Apply Changes</button>
-
+  <button onclick="applyneurchanges()">Apply changes to neuron A</button>
+  <br>
+  <br>
+  <button onclick="setSyn('+')">Set Synapse to excitatory</button>
+  <button onclick="setSyn('-')">Set Synapse to inhibitory</button>
+  <button onclick="setSyn('A')">Set Synapse to type A</button>
+  <button onclick="setSyn('B')">Set Synapse to type B</button>
+  <button onclick="setSyn('C')">Set Synapse to type C</button>
+  <button onclick="setSyn('D')">Set Synapse to type D</button>
+  <br>
   <br>
 
-  <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+  <script> function setSyn(t){
+    globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].OutSyns[(document.getElementById('synapses').value)].setType(t);
+    //document.getElementById('synapses').value.setType(t);
+  }
+  </script>
 
+  <canvas id="myChart" style="width:100%;max-width:1200px"></canvas>
+  <br>
+  <br>
   <form>
     <label for="res">Results:</label><br>
     <textarea id="res" name="res" rows="30" cols="50"></textarea><br>
   </form>
 
 
-  <script>function doSomth(){
-    console.log("blablabli")
+  <script>
+  function displayNeuron(){
+    document.getElementById('iext').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].Iext;
+    document.getElementById('R_Na_leak').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_Na_leak;
+    document.getElementById('R_K_leak').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_K_leak;
+    document.getElementById('R_Na_on').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_Na_on;
+    document.getElementById('R_K_on').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_K_on;
+    document.getElementById('R_Na_thresh').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_Na_thresh;
+    document.getElementById('R_K_thresh').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_K_thresh;
+    document.getElementById('R_delay_up').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_delay_up;
+    document.getElementById('R_delay_down').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_delay_down;
+    document.getElementById('C_v').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].C_v;
+    document.getElementById('C_u').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].C_u;
+    document.getElementById('threshyst').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].threshyst;
+
+    document.getElementById('synapses').length=0;
+    for (let i=0;i<globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].OutSyns.length;i++){
+      if(globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].OutSyns[i].OutNeuron===globalnet.Neurons[(document.getElementById('listn2').selectedIndex)]){
+        var newOption1 = new Option("Synapse "+ i.toString(),i);
+        document.getElementById('synapses').add(newOption1,undefined);
+      }
+    }
+
+
   }
-</script>
-<script>
-function displayNeuron(){
-  document.getElementById('iext').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].Iext;
-  document.getElementById('R_Na_leak').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_Na_leak;
-  document.getElementById('R_K_leak').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_K_leak;
-  document.getElementById('R_Na_on').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_Na_on;
-  document.getElementById('R_K_on').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_K_on;
-  document.getElementById('R_Na_thresh').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_Na_thresh;
-  document.getElementById('R_K_thresh').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_K_thresh;
-  document.getElementById('R_delay_up').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_delay_up;
-  document.getElementById('R_delay_down').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_delay_down;
-  document.getElementById('C_v').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].C_v;
-  document.getElementById('C_u').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].C_u;
-  document.getElementById('threshyst').value=globalnet.Neurons[document.getElementById('listn1').selectedIndex].threshyst;
+  </script>
 
-  document.getElementById('synapses').length=0;
-  for (let i=0;i<globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].OutSyns.length;i++){
-    var newOption1 = new Option("Synapse "+ i.toString(),globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].OutSyns[i]);
-    document.getElementById('synapses').add(newOption1,undefined);
+  <script>
+  function applyneurchanges(){
+
+
+    globalnet.Neurons[document.getElementById('listn1').selectedIndex].Iext=parseFloat(document.getElementById('iext').value);
+    globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_Na_leak=parseFloat(document.getElementById('R_Na_leak').value);
+    globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_K_leak=parseFloat(document.getElementById('R_K_leak').value);
+    globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_Na_on=parseFloat(document.getElementById('R_Na_on').value);
+    globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_K_on=parseFloat(document.getElementById('R_K_on').value);
+    globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_Na_thresh=parseFloat(document.getElementById('R_Na_thresh').value);
+    globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_K_thresh=parseFloat(document.getElementById('R_K_thresh').value);
+    globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_delay_up=parseFloat(document.getElementById('R_delay_up').value);
+    globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_delay_down=parseFloat(document.getElementById('R_delay_down').value);
+    globalnet.Neurons[document.getElementById('listn1').selectedIndex].C_v=parseFloat(document.getElementById('C_v').value);
+    globalnet.Neurons[document.getElementById('listn1').selectedIndex].C_u=parseFloat(document.getElementById('C_u').value);
+    globalnet.Neurons[document.getElementById('listn1').selectedIndex].threshyst=parseFloat(document.getElementById('threshyst').value);
+
   }
-
-}
-</script>
-
-<script>
-function applyneurchanges(){
-/*  globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].Iext=parseFloat(document.getElementById('iext').value);
-  globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].Vrest=parseFloat(document.getElementById('vrest').value);
-  globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].Vreset=parseFloat(document.getElementById('vreset').value);
-  globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].Vthresh=parseFloat(document.getElementById('vthresh').value);
-  globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].C=parseFloat(document.getElementById('c').value);
-  globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].R=parseFloat(document.getElementById('r').value);
-*/
-
-  globalnet.Neurons[document.getElementById('listn1').selectedIndex].Iext=parseFloat(document.getElementById('iext').value);
-  globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_Na_leak=parseFloat(document.getElementById('R_Na_leak').value);
-  globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_K_leak=parseFloat(document.getElementById('R_K_leak').value);
-  globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_Na_on=parseFloat(document.getElementById('R_Na_on').value);
-  globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_K_on=parseFloat(document.getElementById('R_K_on').value);
-  globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_Na_thresh=parseFloat(document.getElementById('R_Na_thresh').value);
-  globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_K_thresh=parseFloat(document.getElementById('R_K_thresh').value);
-  globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_delay_up=parseFloat(document.getElementById('R_delay_up').value);
-  globalnet.Neurons[document.getElementById('listn1').selectedIndex].R_delay_down=parseFloat(document.getElementById('R_delay_down').value);
-  globalnet.Neurons[document.getElementById('listn1').selectedIndex].C_v=parseFloat(document.getElementById('C_v').value);
-  globalnet.Neurons[document.getElementById('listn1').selectedIndex].C_u=parseFloat(document.getElementById('C_u').value);
-  globalnet.Neurons[document.getElementById('listn1').selectedIndex].threshyst=parseFloat(document.getElementById('threshyst').value);
-
-}
-</script>
+  </script>
 
 
-<script>
-//document.getElementById("canvas").getContext("2d")
-var myChart=new Chart("myChart", {
-  type: "line",
-  data: {},
-  options: {
-    //legend: {display: true},
-    scaleFontColor: 'red',
-    animation: {duration: 0},
-    scales:{
-      yAxes:[{
-        Min: 50,
-        Max: 100
-      }],
-    },
-  }
-});
+  <script>
+  //document.getElementById("canvas").getContext("2d")
+  var myChart=new Chart("myChart", {
+    type: "line",
+    data: {},
+    options: {
+      //legend: {display: true},
+      scaleFontColor: 'red',
+      animation: {duration: 0},
+      scales:{
+        yAxes:[{
+          Min: 50,
+          Max: 100
+        }],
+      },
+    }
+  });
 
 </script>
 
@@ -157,12 +202,6 @@ function drawGraph(){
       this.borderColor='red';
       this.cubicInterpolationMode='no';
     }
-    /*label:"",
-    fill: false,
-    pointRadius: 0,
-    data:[],
-    borderColor: "red",
-    cubicInterpolationMode:"no",*/
   };
 
   myChart.data.labels=xdata;
@@ -185,8 +224,8 @@ function drawGraph(){
         ticks: {
           maxTicksLimit: 5,
           beginAtZero: false,
-          min: -4,
-          max: 4,
+          min: -2.5,
+          max: 2.5,
           stepSize: 0.5
         }
       }],

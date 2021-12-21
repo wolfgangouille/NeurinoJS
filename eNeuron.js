@@ -70,9 +70,7 @@ module.exports = class eNeuron {
 		this.V_thresh=(this.Vccp/this.R_Na_thresh+this.Vccm/this.R_K_thresh)/(1/this.R_Na_thresh+1/this.R_K_thresh); //V
 
 		this.R_delay_up=10e3;  //Ohm
-		this.R_delay_down=10e3; //Ohm
-
-		this.i=0; //amp
+		this.R_delay_down=47e3; //Ohm
 
 		this.int1=1; //boolean
 		this.int2=0;
@@ -147,9 +145,9 @@ module.exports = class eNeuron {
 
 
 		this.fire=function(){
-			this.OutSyns.forEach((syn, i) => syn.fire());
-			//this.OutSyns.forEach((syn, i) => syn.prefire=true;
-			//this.InSyns.forEach((syn, i) => syn.postfire=true;
+			//this.OutSyns.forEach((syn, i) => syn.fire());
+			this.OutSyns.forEach((syn, i) => syn.preFire=true);
+			this.InSyns.forEach((syn, i) => syn.postFire=true);
 		}
 	}
 }

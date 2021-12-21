@@ -1,8 +1,6 @@
 module.exports = class eSyn {
 	constructor(neuron){
 		this.I=0;
-		this.I0=0.000001;
-		this.tau=0.1;
 		this.preFire = false;
 		this.postFire = false;
 		this.OutNeuron=neuron;
@@ -13,7 +11,7 @@ module.exports = class eSyn {
 
 		this.VG=this.S1;
 		this.U_stock=this.S2;
-		this.R_w=200e3;
+		this.R_w=20e3;
 		this.C_stock=1e-9;
 		this.R_replen=1;
 		this.R_up=50e3;
@@ -51,11 +49,9 @@ module.exports = class eSyn {
 	};
 
 
-	this.fire=function(){
-		this.I+=this.I0;
-	};
 
-	this.setPolarity=function(t) {
+
+	this.setType=function(t) {
 		switch(t) {
 			case '+':
 			this.S1=5;
@@ -69,15 +65,6 @@ module.exports = class eSyn {
 			this.VT=-1.1;
 			break;
 
-			default:
-			this.S1=5;
-			this.S2=-5;
-			this.VT=1.1;
-		}
-	}
-
-	this.setType=function(t) {
-		switch(t) {
 			case 'A':
 			this.C_stock=1e-9;
 			this.R_replen=1;
@@ -111,7 +98,11 @@ module.exports = class eSyn {
 			break;
 
 			default:
-			console.log("Invalid type, setting to A");
+			console.log("Invalid type, setting to excitatory A");
+			this.S1=5;
+			this.S2=-5;
+			this.VT=1.1;
+
 			this.C_stock=1e-9;
 			this.R_replen=1;
 			this.R_up=50e3;
