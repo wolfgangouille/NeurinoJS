@@ -16,7 +16,7 @@ function runGlobalNet(){
   document.getElementById('res').value="";
   let letext="";
 
-  let dt=0.00025;
+  let dt=0.0001;
   var t=0;
 
   var startTime = performance.now()
