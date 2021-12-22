@@ -3,7 +3,7 @@ const eSyn = require('./eSyn.js');
 const neuralNet = require('./neuralNet.js');
 
 function runGlobalNet(){
-  applyneurchanges()
+  applyChanges()
   xdata=[];
   simuldata=[]; //fix bug here to have unlimited neurons
   for (let i=0;i<globalnet.Neurons.length;i++){
@@ -49,22 +49,22 @@ function runGlobalNet(){
 }
 
 
-
-
-
-
-
 function addtoglobnet(){
+
   globalnet.addNeuron(new eNeuron());
-  var selectBox1=document.getElementById('listn1');
-  var selectBox2=document.getElementById('listn2');
+
   console.log(globalnet);
-  let newOption1 = new Option("Neuron "+(globalnet.Neurons.length-1).toString(),globalnet.Neurons[globalnet.Neurons.length-1]);
-  selectBox1.add(newOption1,undefined);
-  let newOption2 = new Option("Neuron "+(globalnet.Neurons.length-1).toString(),globalnet.Neurons[globalnet.Neurons.length-1]);
-  selectBox2.add(newOption2,undefined);
+
+
+  updateSelectors()
+
+  document.getElementById('listn1').selectedIndex=document.getElementById('listn1').length-1;
+  document.getElementById('listn2').selectedIndex=-1;
+
   displayNeuron()
 }
+
+
 
 function addSynapse(){
   var n1=globalnet.Neurons[(document.getElementById('listn1').selectedIndex)];
@@ -74,6 +74,7 @@ function addSynapse(){
   console.log(globalnet);
   displayNeuron()
   document.getElementById('synapses').selectedIndex=document.getElementById('synapses').length-1;
+  displaySynapse()
   //document.getElementById('synapses').selectedIndex=n1.OutSyns.length-1;
   //  document.getElementById('synapses').value=n1.OutSyns[n1.OutSyns.length-1];
 }

@@ -1,10 +1,11 @@
 module.exports = class eSyn {
 	constructor(neuron){
+		this.ID=0;
 		this.I=0;
 		this.preFire = false;
 		this.postFire = false;
-		this.OutNeuron=neuron;
-
+		this.postNeuron=neuron;
+		this.preNeuron=null;
 		this.VT=1.1; //mosfet threshold in Volt
 		this.S1=5;  //positive for excitatory synapses
 		this.S2=-5;
@@ -110,6 +111,10 @@ module.exports = class eSyn {
 			this.C_speed=1e-7;
 
 		}
+	}
+
+	this.delete=function(){
+		Object.keys(this).forEach(key => delete this[key]);
 	}
 }
 }

@@ -42,6 +42,8 @@ threshyst=0;*/
 
 module.exports = class eNeuron {
 	constructor(){
+		this.IDgenerator=0;
+		this.ID=0;
 
 		this.Isyn=0;
 		this.Iext=0;
@@ -90,6 +92,9 @@ module.exports = class eNeuron {
 
 		this.connectTo=function(neuron){
 			this.OutSyns.push(new eSyn(neuron))
+			this.OutSyns[this.OutSyns.length-1].preNeuron=this;
+			this.OutSyns[this.OutSyns.length-1].ID=this.IDgenerator;
+			this.IDgenerator++;
 			neuron.InSyns.push(this.OutSyns[this.OutSyns.length-1])
 		}
 
@@ -148,6 +153,11 @@ module.exports = class eNeuron {
 			//this.OutSyns.forEach((syn, i) => syn.fire());
 			this.OutSyns.forEach((syn, i) => syn.preFire=true);
 			this.InSyns.forEach((syn, i) => syn.postFire=true);
+		}
+
+		this.delete=function(){
+			this.OutSyns.length=0;
+			Object.keys(this).forEach(key => delete this[key]);
 		}
 	}
 }
