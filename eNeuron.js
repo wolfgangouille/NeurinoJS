@@ -92,10 +92,10 @@ module.exports = class eNeuron {
 
 		this.connectTo=function(neuron){
 			this.OutSyns.push(new eSyn(neuron))
+			this.OutSyns[this.OutSyns.length-1].ID=this.IDgenerator; //define synapse ID
 			this.OutSyns[this.OutSyns.length-1].preNeuron=this;
-			this.OutSyns[this.OutSyns.length-1].ID=this.IDgenerator;
-			this.IDgenerator++;
 			neuron.InSyns.push(this.OutSyns[this.OutSyns.length-1])
+			this.IDgenerator++;
 		}
 
 		this.update=function(dt){

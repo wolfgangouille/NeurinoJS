@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>My eNeuron Simulator</title>
-  <script src="./bundle.js"></script>
+  <script src="./bundle3.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
   <script>   xdata=[];  simuldata=[];  myChart=null; colors=["red","green","blue","magenta","yellow","cyan","black"]</script>
 </head>
@@ -49,26 +49,38 @@
     <tr>
       <td><label for="R_Na_leak">R_Na_leak:</label></td>
       <td><input type="text" id="R_Na_leak" name="R_Na_leak" value=""></input></input></td>
+      <td><label for="C_stock">C_stock:</label></td>
+      <td><input type="text" id="C_stock" name="C_stock" value=""></input></td>
     </tr>
     <tr>
       <td> <label for="R_K_leak">R_K_leak:</label></td>
       <td><input type="text" id="R_K_leak" name="R_K_leak" value=""></input></td>
+      <td><label for="R_replen">R_replen:</label></td>
+      <td><input type="text" id="R_replen" name="R_replen" value=""></input></td>
     </tr>
     <tr>
       <td><label for="R_Na_on">R_Na_on:</label></td>
       <td><input type="text" id="R_Na_on" name="R_Na_on" value=""></input></td>
+      <td><label for="R_decay">R_decay:</label></td>
+      <td><input type="text" id="R_decay" name="R_decay" value=""></input></td>
     </tr>
     <tr>
       <td><label for="R_K_on">R_K_on:</label></td>
       <td><input type="text" id="R_K_on" name="R_K_on" value=""></input></td>
+      <td><label for="R_up">R_up:</label></td>
+      <td><input type="text" id="R_up" name="R_up" value=""></input></td>
     </tr>
     <tr>
       <td><label for="R_Na_thresh">R_Na_thresh:</label></td>
       <td><input type="text" id="R_Na_thresh" name="R_Na_thresh" value=""></input></td>
+      <td><label for="C_speed">C_speed:</label></td>
+      <td><input type="text" id="C_speed" name="C_speed" value=""></input></td>
     </tr>
     <tr>
       <td><label for="R_K_thresh">R_K_thresh:</label></td>
       <td><input type="text" id="R_K_thresh" name="R_K_thresh" value=""></input></td>
+      <td><label for="Polarity">Polarity:</label></td>
+      <td><input type="text" id="Polarity" name="Polarity" value=""></input></td>
     </tr>
     <tr>
       <td><label for="R_delay_up">R_delay_up:</label></td>
@@ -114,6 +126,7 @@
   <script> function setSyn(t){
     globalnet.Neurons[(document.getElementById('listn1').selectedIndex)].OutSyns[(document.getElementById('synapses').value)].setType(t);
     //document.getElementById('synapses').value.setType(t);
+    displaySynapse();
   }
   </script>
 
@@ -179,9 +192,21 @@
       var neur=globalnet.Neurons[(document.getElementById('listn1').selectedIndex)];
       var syn=neur.OutSyns[(document.getElementById('synapses').value)];
       document.getElementById('R_w').value=syn.R_w;
+      document.getElementById('C_stock').value=syn.C_stock;
+      document.getElementById('R_replen').value=syn.R_replen;
+      document.getElementById('R_up').value=syn.R_up;
+      document.getElementById('R_decay').value=syn.R_decay;
+      document.getElementById('C_speed').value=syn.C_speed;
+      document.getElementById('Polarity').value=Math.sign(syn.S1);
     }
     else{
       document.getElementById('R_w').value='';
+      document.getElementById('C_stock').value='';
+      document.getElementById('R_replen').value='';
+      document.getElementById('R_up').value='';
+      document.getElementById('R_decay').value='';
+      document.getElementById('C_speed').value='';
+      document.getElementById('Polarity').value='';
     }
   }
 </script>
@@ -206,6 +231,17 @@ function applyChanges(){
   if (document.getElementById('synapses').selectedIndex>=0){
     var syn=neur.OutSyns[(document.getElementById('synapses').value)];
     syn.R_w=parseFloat(document.getElementById('R_w').value);
+    syn.C_stock=parseFloat(document.getElementById('C_stock').value);
+    syn.R_replen=parseFloat(document.getElementById('R_replen').value);
+    syn.R_up=parseFloat(document.getElementById('R_up').value);
+    syn.R_decay=parseFloat(document.getElementById('R_decay').value);
+    syn.C_speed=parseFloat(document.getElementById('C_speed').value);
+    if (parseFloat(document.getElementById('Polarity').value)===1){
+      syn.setType('+');
+    }
+    else if (parseFloat(document.getElementById('Polarity').value)===-1){
+      syn.setType('-');
+    }
   }
 }
 
@@ -281,7 +317,7 @@ function drawGraph(){
     myChart.data.datasets[i].label="Neuron "+globalnet.Neurons[i].ID.toString();
     myChart.data.datasets[i].fill=false;
     myChart.data.datasets[i].pointRadius=0;
-    myChart.data.datasets[i].borderColor= colors[i%7];
+    myChart.data.datasets[i].borderColor= colors[globalnet.Neurons[i].ID%7];
     myChart.data.datasets[i].cubicInterpolationMode="no";
   }
   myChart.options = {

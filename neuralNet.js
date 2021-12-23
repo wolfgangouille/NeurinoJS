@@ -10,7 +10,7 @@ module.exports = class neuralNet {
 
 		this.deleteNeuronByID=function(ID){
 			for (let i=0;i<this.Neurons.length;i++){
-				for (let j=0;j<this.Neurons[i].OutSyns.length;j++){
+				for (let j=0;j<this.Neurons[i].OutSyns.length;j++){ //for each out neuron
 					if (this.Neurons[i].OutSyns[j].postNeuron.ID===ID){ //remove all conections pointing to deleted neuron
 						this.Neurons[i].OutSyns[j].delete();
 						this.Neurons[i].OutSyns.splice(j,1);
@@ -23,7 +23,7 @@ module.exports = class neuralNet {
 					}
 				}
 			}
-			
+
 			for (let i=0;i<this.Neurons.length;i++){
 				if (this.Neurons[i].ID===ID){
 					this.Neurons[i].delete();

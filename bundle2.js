@@ -399,7 +399,9 @@
 								}
 
 								this.delete=function(){
-									Object.keys(this).forEach(key => delete this[key]);
+									//this=null;
+									//cant delete neuron now
+									//Object.keys(this).forEach(key => delete this[key]);
 								}
 							}
 							}
@@ -522,13 +524,13 @@
 										for (let i=0;i<this.Neurons.length;i++){
 											for (let j=0;j<this.Neurons[i].OutSyns.length;j++){ //for each out neuron
 												if (this.Neurons[i].OutSyns[j].postNeuron.ID===ID){ //remove all conections pointing to deleted neuron
-													//this.Neurons[i].OutSyns[j].delete();
+													this.Neurons[i].OutSyns[j]=null;//.delete();
 													this.Neurons[i].OutSyns.splice(j,1);
 												}
 											}
 											for (let j=0;j<this.Neurons[i].InSyns.length;j++){
 												if (this.Neurons[i].InSyns[j].preNeuron.ID===ID){ //remove all conections coming from  deleted neuron
-													//this.Neurons[i].InSyns[j].delete();
+													this.Neurons[i].InSyns[j]==null;//.delete();
 													this.Neurons[i].InSyns.splice(j,1);
 												}
 											}

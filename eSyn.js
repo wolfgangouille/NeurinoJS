@@ -5,13 +5,14 @@ module.exports = class eSyn {
 		this.preFire = false;
 		this.postFire = false;
 		this.postNeuron=neuron;
-		this.preNeuron=null;
+		this.preNeuron=0;
 		this.VT=1.1; //mosfet threshold in Volt
 		this.S1=5;  //positive for excitatory synapses
 		this.S2=-5;
 
 		this.VG=this.S1;
 		this.U_stock=this.S2;
+
 		this.R_w=20e3;
 		this.C_stock=1e-9;
 		this.R_replen=1;
@@ -114,7 +115,22 @@ module.exports = class eSyn {
 	}
 
 	this.delete=function(){
-		Object.keys(this).forEach(key => delete this[key]);
+		//this=null;
+
+
+		//cant delete neuron now
+		var keys=Object.keys(this)
+		console.log(keys)
+
+		for (let i=0;i<keys.length;i++){
+			 if (keys[i]!='delete' && keys[i]!='preNeuron' && keys[i]!='postNeuron'){
+				 //console.log(keys[i])
+				 //
+				 delete this[keys[i]];
+			 }
+		 }
+		//check how to properly delete this without deleting the neuron which causes error
+		//maybe use a tag to remove them.
 	}
 }
 }
