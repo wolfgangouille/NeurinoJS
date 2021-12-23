@@ -8,6 +8,22 @@ module.exports = class neuralNet {
 			this.IDgenerator++;
 		};
 
+		this.deleteSynapse=function(lasynapse){
+			for (let i=0;i<this.Neurons.length;i++){
+				for (let j=0;j<this.Neurons[i].OutSyns.length;j++){ //for each out neuron
+					if (this.Neurons[i].OutSyns[j]===lasynapse){ //remove all conections pointing to deleted neuron
+						this.Neurons[i].OutSyns.splice(j,1);
+					}
+				}
+				for (let j=0;j<this.Neurons[i].InSyns.length;j++){ //for each out neuron
+					if (this.Neurons[i].InSyns[j]===lasynapse){ //remove all conections pointing to deleted neuron
+						this.Neurons[i].InSyns.splice(j,1);
+					}
+				}
+			}
+				lasynapse.delete(); //probably no need to do that since no more reference
+		}
+
 		this.deleteNeuronByID=function(ID){
 			for (let i=0;i<this.Neurons.length;i++){
 				for (let j=0;j<this.Neurons[i].OutSyns.length;j++){ //for each out neuron

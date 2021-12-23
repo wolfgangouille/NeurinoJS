@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>My eNeuron Simulator</title>
-  <script src="./bundle3.js"></script>
+  <script src="./bundle.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
   <script>   xdata=[];  simuldata=[];  myChart=null; colors=["red","green","blue","magenta","yellow","cyan","black"]</script>
 </head>
@@ -17,6 +17,7 @@
   <button onclick="addtoglobnet()">Add neuron</button>
   <button onclick="deleteNeuron()">Delete neuron</button>
   <button onclick="addSynapse()">Add synapse A->B</button>
+  <button onclick="deleteSynapse()">Delete synapse</button>
   <br>
   <br>
 
@@ -160,7 +161,7 @@
       document.getElementById('synapses').length=0;
       for (let i=0;i<neur.OutSyns.length;i++){
         if(neur.OutSyns[i].postNeuron===globalnet.Neurons[(document.getElementById('listn2').selectedIndex)]){
-          var newOption1 = new Option("Synapse "+ i.toString(),i);
+          var newOption1 = new Option("Synapse "+ neur.OutSyns[i].ID.toString(),i);
           document.getElementById('synapses').add(newOption1,undefined);
         }
       }
@@ -255,6 +256,18 @@ function deleteNeuron(){
     document.getElementById('listn2').selectedIndex=-1;
 
     displayNeuron();
+  }
+}
+
+
+function deleteSynapse(){
+  if (document.getElementById('synapses').selectedIndex>=0){
+    var neur=globalnet.Neurons[(document.getElementById('listn1').selectedIndex)];
+    var syn=neur.OutSyns[(document.getElementById('synapses').selectedIndex)];
+    globalnet.deleteSynapse(syn);
+    updateSelectors();
+    displayNeuron();
+    document.getElementById('synapses').selectedIndex=-1;
   }
 }
 

@@ -297,6 +297,7 @@
 
 									this.VG=this.S1;
 									this.U_stock=this.S2;
+
 									this.R_w=20e3;
 									this.C_stock=1e-9;
 									this.R_replen=1;
@@ -399,7 +400,22 @@
 								}
 
 								this.delete=function(){
-									Object.keys(this).forEach(key => delete this[key]);
+									//this=null;
+
+
+									//cant delete neuron now
+									var keys=Object.keys(this)
+									console.log(keys)
+
+									for (let i=0;i<keys.length;i++){
+										 if (keys[i]!='delete' && keys[i]!='preNeuron' && keys[i]!='postNeuron'){
+											 //console.log(keys[i])
+											 //
+											 delete this[keys[i]];
+										 }
+									 }
+									//check how to properly delete this without deleting the neuron which causes error
+									//maybe use a tag to remove them.
 								}
 							}
 							}
@@ -518,17 +534,33 @@
 										this.IDgenerator++;
 									};
 
+									this.deleteSynapse=function(lasynapse){
+										for (let i=0;i<this.Neurons.length;i++){
+											for (let j=0;j<this.Neurons[i].OutSyns.length;j++){ //for each out neuron
+												if (this.Neurons[i].OutSyns[j]===lasynapse){ //remove all conections pointing to deleted neuron
+													this.Neurons[i].OutSyns.splice(j,1);
+												}
+											}
+											for (let j=0;j<this.Neurons[i].InSyns.length;j++){ //for each out neuron
+												if (this.Neurons[i].InSyns[j]===lasynapse){ //remove all conections pointing to deleted neuron
+													this.Neurons[i].InSyns.splice(j,1);
+												}
+											}
+										}
+											lasynapse.delete(); //probably no need to do that since no more reference
+									}
+
 									this.deleteNeuronByID=function(ID){
 										for (let i=0;i<this.Neurons.length;i++){
 											for (let j=0;j<this.Neurons[i].OutSyns.length;j++){ //for each out neuron
 												if (this.Neurons[i].OutSyns[j].postNeuron.ID===ID){ //remove all conections pointing to deleted neuron
-													//this.Neurons[i].OutSyns[j].delete();
+													this.Neurons[i].OutSyns[j].delete();
 													this.Neurons[i].OutSyns.splice(j,1);
 												}
 											}
 											for (let j=0;j<this.Neurons[i].InSyns.length;j++){
 												if (this.Neurons[i].InSyns[j].preNeuron.ID===ID){ //remove all conections coming from  deleted neuron
-													//this.Neurons[i].InSyns[j].delete();
+													this.Neurons[i].InSyns[j].delete();
 													this.Neurons[i].InSyns.splice(j,1);
 												}
 											}
