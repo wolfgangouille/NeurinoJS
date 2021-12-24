@@ -1,43 +1,6 @@
 
 const eSyn = require('./eSyn.js');
 
-/*Vccp=5; //V
-Vccm=-5; //V
-
-v=0; //V
-u=0; //V
-
-C_v=1e-6; //F
-C_u=1e-7; //F
-
-R_Na_leak=100e3; //Ohm
-R_K_leak=100e3; //Ohm
-
-R_Na_on=10e3; //Ohm
-R_K_on=20e3; //Ohm
-
-
-R_Na_thresh=90e3; //Ohm
-R_K_thresh=100e3; //Ohm
-
-v_thresh=(Vccp/R_Na_thresh+Vccm/R_K_thresh)/(1/R_Na_thresh+1/R_K_thresh); //V
-
-R_delay_up=10e3;  //Ohm
-R_delay_down=10e3; //Ohm
-
-i=0; //amp
-
-int1=1; //boolean
-int2=0;
-int3=0;
-int4=0;
-
-//v is controlled by 1, 2 and 3.
-//u is controlled by 4
-//2 and 4 are controlled by v.
-//1 and 3 are controlled by u.
-
-threshyst=0;*/
 
 
 module.exports = class eNeuron {
@@ -46,7 +9,7 @@ module.exports = class eNeuron {
 		this.ID=0;
 
 		this.Isyn=0;
-		this.Iext=0;
+		this.Iext=0.00001;
 
 		this.type="eNeuron";
 
@@ -159,5 +122,85 @@ module.exports = class eNeuron {
 			this.OutSyns.length=0;
 			Object.keys(this).forEach(key => delete this[key]);
 		}
+
+		this.serialize=function(){
+			var OutSyns=[];
+			var InSyns=[];
+			for (let i=0;i<this.OutSyns.length;i++){
+				OutSyns.push(this.OutSyns[i].serialize());
+			}
+			for (let i=0;i<this.InSyns.length;i++){
+				InSyns.push(this.InSyns[i].serialize());
+			}
+
+			const obj={
+				IDgenerator:this.IDgenerator,
+				ID:this.ID,
+				Isyn:this.Isyn,
+				Iext:this.Iext,
+				type:this.type,
+				Vccp:this.Vccp, // need ID instead of pointer
+				Vccm:this.Vccm,
+				V:this.V, //mosfet threshold in Volt
+				U:this.U,  //positive for excitatory synapses
+				C_v:this.C_v,
+				C_u:this.C_u,
+				R_Na_leak:this.R_Na_leak,
+				R_K_leak:this.R_K_leak,
+				R_Na_on:this.R_Na_on,
+				R_K_on:this.R_K_on,
+				R_Na_thresh:this.R_Na_thresh,
+				R_K_thresh:this.R_K_thresh,
+				V_thresh:this.V_thresh,
+				R_delay_up:this.R_delay_up,
+				R_delay_down:this.R_delay_down,
+				int1:this.int1,
+				int2:this.int2,
+				int3:this.int3,
+				int4:this.int4,
+				threshyst:this.threshyst,
+				OutSyns:OutSyns,
+				InSyns:InSyns,
+			}
+			return obj;
+		}
+
+		this.deserialize=function(obj){
+			this.OutSyns=[];
+			this.InSyns=[];
+
+
+				this.IDgenerator=obj.IDgenerator;
+				this.ID=obj.ID;
+				this.Isyn=obj.Isyn;
+				this.Iext=obj.Iext;
+				this.type=obj.type;
+				this.Vccp=obj.Vccp; // need ID instead of pointer
+				this.Vccm=obj.Vccm;
+			  this.V=obj.V; //mosfet threshold in Volt
+				this.U=obj.U;  //positive for excitatory synapses
+				this.C_v=obj.C_v;
+				this.C_u=obj.C_u;
+				this.R_Na_leak=obj.R_Na_leak;
+				this.R_K_leak=obj.R_K_leak;
+				this.R_Na_on=obj.R_Na_on;
+				this.R_K_on=obj.R_K_on;
+				this.R_Na_thresh=obj.R_Na_thresh;
+				this.R_K_thresh=obj.R_K_thresh;
+				this.V_thresh=obj.V_thresh;
+				this.R_delay_up=obj.R_delay_up;
+				this.R_delay_down=obj.R_delay_down;
+				this.int1=obj.int1;
+				this.int2=obj.int2;
+				this.int3=obj.int3;
+				this.int4=obj.int4;
+				this.threshyst=obj.threshyst;
+
+
+		}
 	}
 }
+
+
+//this.OutSyns=[];
+//this.InSyns=[];

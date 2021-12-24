@@ -23,7 +23,7 @@
 	};
 	resolve = function (scope, tree, path, fullPath, state, id) {
 		var name, dir, exports, module, fn, found, ext;
-		path = path.split('/');
+		path = path.split(/[\\/]/);
 		name = path.pop();
 		if ((name === '.') || (name === '..')) {
 			path.push(name);
@@ -112,479 +112,557 @@
 	return getRequire(modules, [], '');
 })
 ({
-	"/": {
-		"Users": {
-			"renaud": {
-				"Desktop": {
-					"NeurinoJS": {
-						"eNeuron.js": function (exports, module, require) {
-							
-							const eSyn = require('./eSyn.js');
-
-							/*Vccp=5; //V
-							Vccm=-5; //V
-
-							v=0; //V
-							u=0; //V
-
-							C_v=1e-6; //F
-							C_u=1e-7; //F
-
-							R_Na_leak=100e3; //Ohm
-							R_K_leak=100e3; //Ohm
-
-							R_Na_on=10e3; //Ohm
-							R_K_on=20e3; //Ohm
-
-
-							R_Na_thresh=90e3; //Ohm
-							R_K_thresh=100e3; //Ohm
-
-							v_thresh=(Vccp/R_Na_thresh+Vccm/R_K_thresh)/(1/R_Na_thresh+1/R_K_thresh); //V
-
-							R_delay_up=10e3;  //Ohm
-							R_delay_down=10e3; //Ohm
-
-							i=0; //amp
-
-							int1=1; //boolean
-							int2=0;
-							int3=0;
-							int4=0;
-
-							//v is controlled by 1, 2 and 3.
-							//u is controlled by 4
-							//2 and 4 are controlled by v.
-							//1 and 3 are controlled by u.
-
-							threshyst=0;*/
-
-
-							module.exports = class eNeuron {
-								constructor(){
-									this.IDgenerator=0;
-									this.ID=0;
-
-									this.Isyn=0;
-									this.Iext=0;
-
-									this.type="eNeuron";
-
-									this.Vccp=5; //V
-									this.Vccm=-5; //V
-
-									this.V=0; //V
-									this.U=0; //V
-
-									this.C_v=1e-6; //F
-									this.C_u=1e-7; //F
-
-									this.R_Na_leak=100e3; //Ohm
-									this.R_K_leak=100e3; //Ohm
-
-									this.R_Na_on=10e3; //Ohm
-									this.R_K_on=20e3; //Ohm
-
-
-									this.R_Na_thresh=90e3; //Ohm
-									this.R_K_thresh=100e3; //Ohm
-
-									this.V_thresh=(this.Vccp/this.R_Na_thresh+this.Vccm/this.R_K_thresh)/(1/this.R_Na_thresh+1/this.R_K_thresh); //V
-
-									this.R_delay_up=10e3;  //Ohm
-									this.R_delay_down=47e3; //Ohm
-
-									this.int1=1; //boolean
-									this.int2=0;
-									this.int3=0;
-									this.int4=0;
-
-									//v is controlled by 1, 2 and 3.
-									//u is controlled by 4
-									//2 and 4 are controlled by v.
-									//1 and 3 are controlled by u.
-
-									this.threshyst=0;
-
-									this.OutSyns=[];
-									this.InSyns=[];
-
-
-									this.connectTo=function(neuron){
-										this.OutSyns.push(new eSyn(neuron))
-										this.OutSyns[this.OutSyns.length-1].ID=this.IDgenerator; //define synapse ID
-										this.OutSyns[this.OutSyns.length-1].preNeuron=this;
-										neuron.InSyns.push(this.OutSyns[this.OutSyns.length-1])
-										this.IDgenerator++;
+	"Desktop": {
+		"NeurinoJS": {
+			"eNeuron.js": function (exports, module, require) {
+				
+				const eSyn = require('./eSyn.js');
+				
+				
+				
+				module.exports = class eNeuron {
+					constructor(){
+						this.IDgenerator=0;
+						this.ID=0;
+				
+						this.Isyn=0;
+						this.Iext=0.00001;
+				
+						this.type="eNeuron";
+				
+						this.Vccp=5; //V
+						this.Vccm=-5; //V
+				
+						this.V=0; //V
+						this.U=0; //V
+				
+						this.C_v=1e-6; //F
+						this.C_u=1e-7; //F
+				
+						this.R_Na_leak=100e3; //Ohm
+						this.R_K_leak=100e3; //Ohm
+				
+						this.R_Na_on=10e3; //Ohm
+						this.R_K_on=20e3; //Ohm
+				
+				
+						this.R_Na_thresh=90e3; //Ohm
+						this.R_K_thresh=100e3; //Ohm
+				
+						this.V_thresh=(this.Vccp/this.R_Na_thresh+this.Vccm/this.R_K_thresh)/(1/this.R_Na_thresh+1/this.R_K_thresh); //V
+				
+						this.R_delay_up=10e3;  //Ohm
+						this.R_delay_down=47e3; //Ohm
+				
+						this.int1=1; //boolean
+						this.int2=0;
+						this.int3=0;
+						this.int4=0;
+				
+						//v is controlled by 1, 2 and 3.
+						//u is controlled by 4
+						//2 and 4 are controlled by v.
+						//1 and 3 are controlled by u.
+				
+						this.threshyst=0;
+				
+						this.OutSyns=[];
+						this.InSyns=[];
+				
+				
+						this.connectTo=function(neuron){
+							this.OutSyns.push(new eSyn(neuron))
+							this.OutSyns[this.OutSyns.length-1].ID=this.IDgenerator; //define synapse ID
+							this.OutSyns[this.OutSyns.length-1].preNeuron=this;
+							neuron.InSyns.push(this.OutSyns[this.OutSyns.length-1])
+							this.IDgenerator++;
+						}
+				
+						this.update=function(dt){
+							this.OutSyns.forEach((syn, i) => syn.update(dt));
+				
+							this.V_thresh=(this.Vccp/this.R_Na_thresh+this.Vccm/this.R_K_thresh)/(1/this.R_Na_thresh+1/this.R_K_thresh); //V
+				
+				
+							this.V+=((this.Iext+this.Isyn)/this.C_v)*dt;
+				
+							if (this.V>=this.V_thresh) {
+								this.int2=1;
+								this.int4=1;
+								this.fire();
+							}
+							else {
+								this.int2=0;
+								this.int4=0;
+							}
+				
+							if (this.U>0+(Math.sign(this.int1-0.5)*(this.threshyst))) { //Symmetrical hysteresis
+								this.int1=0;
+								this.int3=1;
+							}
+							else {
+								this.int1=1;
+								this.int3=0;
+							}
+				
+							var g_v_plus=1/this.R_Na_leak+(this.int1*this.int2)/this.R_Na_on;
+							var g_v_moins=1/this.R_K_leak+(this.int3)/this.R_K_on;
+				
+							var g_u_plus=this.int4/this.R_delay_up;
+							var g_u_moins=(1-this.int4)/this.R_delay_down;
+				
+							//double vold=v;
+				
+							//v=v+(dt/C_v)*(g_v_plus*(Vccp-vold)+g_v_moins*(Vccm-vold));
+				
+							this.V=this.V+(this.Vccp-this.V)*(1-Math.exp(-dt*g_v_plus/this.C_v))+(this.Vccm-this.V)*(1-Math.exp(-dt*g_v_moins/this.C_v));
+				
+							//u=u+(dt/C_u)*(g_u_plus*(Vccp-u)+g_u_moins*(Vccm-u));
+							this.U=this.U+(this.Vccp-this.U)*(1-Math.exp(-dt*g_u_plus/this.C_u))+(this.Vccm-this.U)*(1-Math.exp(-dt*g_u_moins/this.C_u));
+				
+						}
+				
+				
+						this.computeIsyn=function(){
+							this.Isyn=0;
+							for (const syn of this.InSyns) { this.Isyn+=syn.I }
+						}
+				
+				
+						this.fire=function(){
+							//this.OutSyns.forEach((syn, i) => syn.fire());
+							this.OutSyns.forEach((syn, i) => syn.preFire=true);
+							this.InSyns.forEach((syn, i) => syn.postFire=true);
+						}
+				
+						this.delete=function(){
+							this.OutSyns.length=0;
+							Object.keys(this).forEach(key => delete this[key]);
+						}
+				
+						this.serialize=function(){
+							var OutSyns=[];
+							var InSyns=[];
+							for (let i=0;i<this.OutSyns.length;i++){
+								OutSyns.push(this.OutSyns[i].serialize());
+							}
+							for (let i=0;i<this.InSyns.length;i++){
+								InSyns.push(this.InSyns[i].serialize());
+							}
+				
+							const obj={
+								IDgenerator:this.IDgenerator,
+								ID:this.ID,
+								Isyn:this.Isyn,
+								Iext:this.Iext,
+								type:this.type,
+								Vccp:this.Vccp, // need ID instead of pointer
+								Vccm:this.Vccm,
+								V:this.V, //mosfet threshold in Volt
+								U:this.U,  //positive for excitatory synapses
+								C_v:this.C_v,
+								C_u:this.C_u,
+								R_Na_leak:this.R_Na_leak,
+								R_K_leak:this.R_K_leak,
+								R_Na_on:this.R_Na_on,
+								R_K_on:this.R_K_on,
+								R_Na_thresh:this.R_Na_thresh,
+								R_K_thresh:this.R_K_thresh,
+								V_thresh:this.V_thresh,
+								R_delay_up:this.R_delay_up,
+								R_delay_down:this.R_delay_down,
+								int1:this.int1,
+								int2:this.int2,
+								int3:this.int3,
+								int4:this.int4,
+								threshyst:this.threshyst,
+								OutSyns:OutSyns,
+								InSyns:InSyns,
+							}
+							return obj;
+						}
+				
+						this.deserialize=function(obj){
+							this.OutSyns=[];
+							this.InSyns=[];
+				
+				
+								this.IDgenerator=obj.IDgenerator;
+								this.ID=obj.ID;
+								this.Isyn=obj.Isyn;
+								this.Iext=obj.Iext;
+								this.type=obj.type;
+								this.Vccp=obj.Vccp; // need ID instead of pointer
+								this.Vccm=obj.Vccm;
+							  this.V=obj.V; //mosfet threshold in Volt
+								this.U=obj.U;  //positive for excitatory synapses
+								this.C_v=obj.C_v;
+								this.C_u=obj.C_u;
+								this.R_Na_leak=obj.R_Na_leak;
+								this.R_K_leak=obj.R_K_leak;
+								this.R_Na_on=obj.R_Na_on;
+								this.R_K_on=obj.R_K_on;
+								this.R_Na_thresh=obj.R_Na_thresh;
+								this.R_K_thresh=obj.R_K_thresh;
+								this.V_thresh=obj.V_thresh;
+								this.R_delay_up=obj.R_delay_up;
+								this.R_delay_down=obj.R_delay_down;
+								this.int1=obj.int1;
+								this.int2=obj.int2;
+								this.int3=obj.int3;
+								this.int4=obj.int4;
+								this.threshyst=obj.threshyst;
+				
+				
+						}
+					}
+				}
+				
+				
+				//this.OutSyns=[];
+				//this.InSyns=[];
+			},
+			"eSyn.js": function (exports, module, require) {
+				module.exports = class eSyn {
+					constructor(neuron){
+						this.ID=0;
+						this.I=0;
+						this.preFire = false;
+						this.postFire = false;
+						this.postNeuron=neuron;
+						this.preNeuron=0;
+						this.VT=1.1; //mosfet threshold in Volt
+						this.S1=5;  //positive for excitatory synapses
+						this.S2=-5;
+				
+						this.VG=this.S1;
+						this.U_stock=this.S2;
+				
+						this.R_w=20e3;
+						this.C_stock=1e-9;
+						this.R_replen=1;
+						this.R_up=50e3;
+						this.R_decay=100e3;
+						this.C_speed=1e-7;
+				
+				
+						this.update=function(dt){
+							//this.I=this.I*Math.exp(-dt/this.tau);
+				
+							var VG_old=this.VG;
+				
+				
+							if (this.preFire){
+								this.VG=this.VG+(this.S1-this.VG)*(1-Math.exp(-dt/(this.C_speed*this.R_decay)))+(this.U_stock-this.VG)*(1-Math.exp(-dt/(this.C_speed*this.R_up)));
+								this.U_stock=this.U_stock+(this.S2-this.U_stock)*(1-Math.exp(-dt/(this.C_stock*this.R_replen)))+(VG_old-this.U_stock)*(1-Math.exp(-dt/(this.C_stock*this.R_up)));;
+							}
+							else {
+								this.VG=this.VG+(this.S1-this.VG)*(1-Math.exp(-dt/(this.C_speed*this.R_decay)));
+								this.U_stock=this.U_stock+(this.S2-this.U_stock)*(1-Math.exp(-dt/(this.C_stock*this.R_replen)));
+							}
+				
+				
+							if (this.S1>0) {
+								this.I=Math.max(this.S1-this.VG-this.VT,0)/this.R_w; //if S1 est +
+							}
+							else {
+								this.I=Math.min(this.S1-this.VG-this.VT,0)/this.R_w; //if S1 est -
+							}
+							this.preFire=false;
+							this.postFire=false;
+				
+						};
+				
+						this.setType=function(t) {
+							switch(t) {
+								case '+':
+								this.S1=5;
+								this.S2=-5;
+								this.VT=1.1;
+								break;
+				
+								case '-':
+								this.S1=-5;
+								this.S2=5;
+								this.VT=-1.1;
+								break;
+				
+								case 'A':
+								this.C_stock=1e-9;
+								this.R_replen=1;
+								this.R_up=50e3;
+								this.R_decay=100e3;
+								this.C_speed=1e-7;
+								break;
+				
+								case 'B':
+								this.C_stock=1e-6;
+								this.R_replen=500e3;
+								this.R_up=50e3;
+								this.R_decay=100e3;
+								this.C_speed=1e-7;
+								break;
+				
+								case 'C':
+								this.C_stock=1e-9;
+								this.R_replen=1;
+								this.R_up=20e3;
+								this.R_decay=100e3;
+								this.C_speed=1e-6;
+								break;
+				
+								case 'D':
+								this.C_stock=1e-6;
+								this.R_replen=500e3;
+								this.R_up=10e3;
+								this.R_decay=100e3;
+								this.C_speed=1e-6;
+								break;
+				
+								default:
+								console.log("Invalid type, setting to excitatory A");
+								this.S1=5;
+								this.S2=-5;
+								this.VT=1.1;
+				
+								this.C_stock=1e-9;
+								this.R_replen=1;
+								this.R_up=50e3;
+								this.R_decay=100e3;
+								this.C_speed=1e-7;
+				
+							}
+						}
+				
+						this.delete=function(){
+				
+							//cant delete neuron now
+							var keys=Object.keys(this)
+							console.log(keys)
+				
+							for (let i=0;i<keys.length;i++){
+								if (keys[i]!='delete' && keys[i]!='preNeuron' && keys[i]!='postNeuron'){
+									//console.log(keys[i])
+									//
+									delete this[keys[i]];
+								}
+							}
+							//check how to properly delete this without deleting the neuron which causes error
+							//maybe use a tag to remove them.
+						}
+				
+						this.serialize=function(){
+							const obj={
+								ID:this.ID,
+								I:this.I,
+								preFire:this.preFire,
+								postFire:this.postFire,
+								postNeuronID:this.postNeuron.ID, // need ID instead of pointer
+								preNeuronID:this.preNeuron.ID,
+								VT:this.VT, //mosfet threshold in Volt
+								S1:this.S1,  //positive for excitatory synapses
+								S2:this.S2,
+								VG:this.VG,
+								U_stock:this.U_stock,
+								R_w:this.R_w,
+								C_stock:this.C_stock,
+								R_replen:this.R_replen,
+								R_up:this.R_up,
+								R_decay:this.R_decay,
+								C_speed:this.C_speed
+							};
+							return obj;
+						}
+					}
+				}
+			},
+			"main.js": function (exports, module, require) {
+				//const { performance } = require('perf_hooks'); //apparently no need to import it ?
+				//const fs = require('fs');
+				
+				const eNeuron = require('./eNeuron.js');
+				const eSyn = require('./eSyn.js');
+				const neuralNet = require('./neuralNet.js');
+				const mesfoncs = require('./mesfoncs.js');
+				
+				addtoglobnet=mesfoncs.addtoglobnet;
+				runGlobalNet=mesfoncs.runGlobalNet;
+				addSynapse=mesfoncs.addSynapse;
+				//mafonc();
+				globalnet=new neuralNet();
+				
+				console.log(window)
+				//console.log(n1);
+				//console.log(n2);
+			},
+			"mesfoncs.js": function (exports, module, require) {
+				const eNeuron = require('./eNeuron.js');
+				const eSyn = require('./eSyn.js');
+				const neuralNet = require('./neuralNet.js');
+				
+				function runGlobalNet(){
+				  applyChanges()
+				  xdata=[];
+				  simuldata=[]; //fix bug here to have unlimited neurons
+				  for (let i=0;i<globalnet.Neurons.length;i++){
+				    simuldata.push([]);
+				  }
+				
+				  console.log("Starting simulation")
+				  //leI=parseFloat(document.getElementById('i').value);
+				
+				  document.getElementById('res').value="";
+				  let letext="";
+				
+				  let dt=0.0001;
+				  var t=0;
+				
+				  var startTime = performance.now()
+				
+				  for (let k=0;k<3/dt;k++){
+				    t+=dt;
+				    letext=letext+(Math.round(t * 100000) / 100000).toFixed(5)+" ";
+				    xdata.push(t);
+				    //simuldata[0].push(globalnet.Neurons[0].V);
+				    //simuldata[1].push(globalnet.Neurons[1].V);
+				    //simuldata[2].push(globalnet.Neurons[1].V);
+				    globalnet.update(dt);
+				    for (let i=0;i<globalnet.Neurons.length;i++){
+				      letext=letext+(Math.round(globalnet.Neurons[i].V * 10000) / 10000).toFixed(4)+" ";
+				      simuldata[i].push(globalnet.Neurons[i].V);
+				    }
+				    //letext=letext+(Math.round(globalnet.Neurons[0].OutSyns[0].I * 1000000000) /1000).toFixed(3)+ " ";
+				    letext=letext+"\n"
+				
+				
+				  }
+				
+				  var endTime = performance.now()
+				
+				  console.log(`Simulation took ${endTime - startTime} milliseconds`)
+				
+				  document.getElementById('res').value=letext;
+				  console.log(window)
+				  drawGraph();
+				}
+				
+				
+				function addtoglobnet(){
+				
+				  globalnet.addNeuron(new eNeuron());
+				
+				  console.log(globalnet);
+				
+				
+				  updateSelectors()
+				
+				  document.getElementById('listn1').selectedIndex=document.getElementById('listn1').length-1;
+				  document.getElementById('listn2').selectedIndex=-1;
+				
+				  displayNeuron()
+				}
+				
+				
+				
+				function addSynapse(){
+				  var n1=globalnet.Neurons[(document.getElementById('listn1').selectedIndex)];
+				  var n2=globalnet.Neurons[(document.getElementById('listn2').selectedIndex)];
+				  n1.connectTo(n2);
+				
+				  console.log(globalnet);
+				  displayNeuron()
+				  document.getElementById('synapses').selectedIndex=document.getElementById('synapses').length-1;
+				  displaySynapse()
+				  //document.getElementById('synapses').selectedIndex=n1.OutSyns.length-1;
+				  //  document.getElementById('synapses').value=n1.OutSyns[n1.OutSyns.length-1];
+				}
+				
+				module.exports = { addtoglobnet, runGlobalNet,addSynapse};
+			},
+			"neuralNet.js": function (exports, module, require) {
+				const eNeuron = require('./eNeuron.js');
+				const eSyn = require('./eSyn.js');
+				
+				module.exports = class neuralNet {
+					constructor(){
+						this.IDgenerator=0;
+						this.Neurons=[];
+				
+						this.addNeuron=function(neuron){
+							this.Neurons.push(neuron);
+							neuron.ID=this.IDgenerator;
+							this.IDgenerator++;
+						};
+				
+						this.deleteSynapse=function(lasynapse){
+							for (let i=0;i<this.Neurons.length;i++){
+								for (let j=0;j<this.Neurons[i].OutSyns.length;j++){ //for each out neuron
+									if (this.Neurons[i].OutSyns[j]===lasynapse){ //remove all conections pointing to deleted neuron
+										this.Neurons[i].OutSyns.splice(j,1); //just remove reference
 									}
-
-									this.update=function(dt){
-										this.OutSyns.forEach((syn, i) => syn.update(dt));
-
-										this.V_thresh=(this.Vccp/this.R_Na_thresh+this.Vccm/this.R_K_thresh)/(1/this.R_Na_thresh+1/this.R_K_thresh); //V
-
-
-										this.V+=((this.Iext+this.Isyn)/this.C_v)*dt;
-
-										if (this.V>=this.V_thresh) {
-											this.int2=1;
-											this.int4=1;
-											this.fire();
-										}
-										else {
-											this.int2=0;
-											this.int4=0;
-										}
-
-										if (this.U>0+(Math.sign(this.int1-0.5)*(this.threshyst))) { //Symmetrical hysteresis
-											this.int1=0;
-											this.int3=1;
-										}
-										else {
-											this.int1=1;
-											this.int3=0;
-										}
-
-										var g_v_plus=1/this.R_Na_leak+(this.int1*this.int2)/this.R_Na_on;
-										var g_v_moins=1/this.R_K_leak+(this.int3)/this.R_K_on;
-
-										var g_u_plus=this.int4/this.R_delay_up;
-										var g_u_moins=(1-this.int4)/this.R_delay_down;
-
-										//double vold=v;
-
-										//v=v+(dt/C_v)*(g_v_plus*(Vccp-vold)+g_v_moins*(Vccm-vold));
-
-										this.V=this.V+(this.Vccp-this.V)*(1-Math.exp(-dt*g_v_plus/this.C_v))+(this.Vccm-this.V)*(1-Math.exp(-dt*g_v_moins/this.C_v));
-
-										//u=u+(dt/C_u)*(g_u_plus*(Vccp-u)+g_u_moins*(Vccm-u));
-										this.U=this.U+(this.Vccp-this.U)*(1-Math.exp(-dt*g_u_plus/this.C_u))+(this.Vccm-this.U)*(1-Math.exp(-dt*g_u_moins/this.C_u));
-
-									}
-
-
-									this.computeIsyn=function(){
-										this.Isyn=0;
-										for (const syn of this.InSyns) { this.Isyn+=syn.I }
-									}
-
-
-									this.fire=function(){
-										//this.OutSyns.forEach((syn, i) => syn.fire());
-										this.OutSyns.forEach((syn, i) => syn.preFire=true);
-										this.InSyns.forEach((syn, i) => syn.postFire=true);
-									}
-
-									this.delete=function(){
-										this.OutSyns.length=0;
-										Object.keys(this).forEach(key => delete this[key]);
+								}
+								for (let j=0;j<this.Neurons[i].InSyns.length;j++){ //for each out neuron
+									if (this.Neurons[i].InSyns[j]===lasynapse){ //remove all conections pointing to deleted neuron
+										this.Neurons[i].InSyns.splice(j,1);
 									}
 								}
 							}
-						},
-						"eSyn.js": function (exports, module, require) {
-							module.exports = class eSyn {
-								constructor(neuron){
-									this.ID=0;
-									this.I=0;
-									this.preFire = false;
-									this.postFire = false;
-									this.postNeuron=neuron;
-									this.preNeuron=0;
-									this.VT=1.1; //mosfet threshold in Volt
-									this.S1=5;  //positive for excitatory synapses
-									this.S2=-5;
-
-									this.VG=this.S1;
-									this.U_stock=this.S2;
-
-									this.R_w=20e3;
-									this.C_stock=1e-9;
-									this.R_replen=1;
-									this.R_up=50e3;
-									this.R_decay=100e3;
-									this.C_speed=1e-7;
-
-
-
-
-								this.update=function(dt){
-									//this.I=this.I*Math.exp(-dt/this.tau);
-
-									var VG_old=this.VG;
-
-
-									if (this.preFire){
-										this.VG=this.VG+(this.S1-this.VG)*(1-Math.exp(-dt/(this.C_speed*this.R_decay)))+(this.U_stock-this.VG)*(1-Math.exp(-dt/(this.C_speed*this.R_up)));
-										this.U_stock=this.U_stock+(this.S2-this.U_stock)*(1-Math.exp(-dt/(this.C_stock*this.R_replen)))+(VG_old-this.U_stock)*(1-Math.exp(-dt/(this.C_stock*this.R_up)));;
-									}
-									else {
-										this.VG=this.VG+(this.S1-this.VG)*(1-Math.exp(-dt/(this.C_speed*this.R_decay)));
-										this.U_stock=this.U_stock+(this.S2-this.U_stock)*(1-Math.exp(-dt/(this.C_stock*this.R_replen)));
-									}
-
-
-									if (this.S1>0) {
-										this.I=Math.max(this.S1-this.VG-this.VT,0)/this.R_w; //if S1 est +
-									}
-									else {
-										this.I=Math.min(this.S1-this.VG-this.VT,0)/this.R_w; //if S1 est -
-									}
-									this.preFire=false;
-									this.postFire=false;
-
-								};
-
-
-
-
-								this.setType=function(t) {
-									switch(t) {
-										case '+':
-										this.S1=5;
-										this.S2=-5;
-										this.VT=1.1;
-										break;
-
-										case '-':
-										this.S1=-5;
-										this.S2=5;
-										this.VT=-1.1;
-										break;
-
-										case 'A':
-										this.C_stock=1e-9;
-										this.R_replen=1;
-										this.R_up=50e3;
-										this.R_decay=100e3;
-										this.C_speed=1e-7;
-										break;
-
-										case 'B':
-										this.C_stock=1e-6;
-										this.R_replen=500e3;
-										this.R_up=50e3;
-										this.R_decay=100e3;
-										this.C_speed=1e-7;
-										break;
-
-										case 'C':
-										this.C_stock=1e-9;
-										this.R_replen=1;
-										this.R_up=20e3;
-										this.R_decay=100e3;
-										this.C_speed=1e-6;
-										break;
-
-										case 'D':
-										this.C_stock=1e-6;
-										this.R_replen=500e3;
-										this.R_up=10e3;
-										this.R_decay=100e3;
-										this.C_speed=1e-6;
-										break;
-
-										default:
-										console.log("Invalid type, setting to excitatory A");
-										this.S1=5;
-										this.S2=-5;
-										this.VT=1.1;
-
-										this.C_stock=1e-9;
-										this.R_replen=1;
-										this.R_up=50e3;
-										this.R_decay=100e3;
-										this.C_speed=1e-7;
-
+							lasynapse.delete(); //probably no need to do that since no more reference
+						}
+				
+						this.deleteNeuronByID=function(ID){
+							for (let i=0;i<this.Neurons.length;i++){
+								for (let j=0;j<this.Neurons[i].OutSyns.length;j++){ //for each out neuron
+									if (this.Neurons[i].OutSyns[j].postNeuron.ID===ID){ //remove all conections pointing to deleted neuron
+										this.Neurons[i].OutSyns[j].delete();
+										this.Neurons[i].OutSyns.splice(j,1);
 									}
 								}
-
-								this.delete=function(){
-									//this=null;
-
-
-									//cant delete neuron now
-									var keys=Object.keys(this)
-									console.log(keys)
-
-									for (let i=0;i<keys.length;i++){
-										 if (keys[i]!='delete' && keys[i]!='preNeuron' && keys[i]!='postNeuron'){
-											 //console.log(keys[i])
-											 //
-											 delete this[keys[i]];
-										 }
-									 }
-									//check how to properly delete this without deleting the neuron which causes error
-									//maybe use a tag to remove them.
-								}
-							}
-							}
-						},
-						"main.js": function (exports, module, require) {
-							//const { performance } = require('perf_hooks'); //apparently no need to import it ?
-
-
-							const eNeuron = require('./eNeuron.js');
-							const eSyn = require('./eSyn.js');
-							const neuralNet = require('./neuralNet.js');
-							const mesfoncs = require('./mesfoncs.js');
-
-							addtoglobnet=mesfoncs.addtoglobnet;
-							runGlobalNet=mesfoncs.runGlobalNet;
-							addSynapse=mesfoncs.addSynapse;
-							//mafonc();
-							globalnet=new neuralNet();
-
-							console.log(window)
-							//console.log(n1);
-							//console.log(n2);
-						},
-						"mesfoncs.js": function (exports, module, require) {
-							const eNeuron = require('./eNeuron.js');
-							const eSyn = require('./eSyn.js');
-							const neuralNet = require('./neuralNet.js');
-
-							function runGlobalNet(){
-							  applyChanges()
-							  xdata=[];
-							  simuldata=[]; //fix bug here to have unlimited neurons
-							  for (let i=0;i<globalnet.Neurons.length;i++){
-							    simuldata.push([]);
-							  }
-
-							  console.log("Starting simulation")
-							  //leI=parseFloat(document.getElementById('i').value);
-
-							  document.getElementById('res').value="";
-							  let letext="";
-
-							  let dt=0.0001;
-							  var t=0;
-
-							  var startTime = performance.now()
-
-							  for (let k=0;k<3/dt;k++){
-							    t+=dt;
-							    letext=letext+(Math.round(t * 100000) / 100000).toFixed(5)+" ";
-							    xdata.push(t);
-							    //simuldata[0].push(globalnet.Neurons[0].V);
-							    //simuldata[1].push(globalnet.Neurons[1].V);
-							    //simuldata[2].push(globalnet.Neurons[1].V);
-							    globalnet.update(dt);
-							    for (let i=0;i<globalnet.Neurons.length;i++){
-							      letext=letext+(Math.round(globalnet.Neurons[i].V * 10000) / 10000).toFixed(4)+" ";
-							      simuldata[i].push(globalnet.Neurons[i].V);
-							    }
-							    //letext=letext+(Math.round(globalnet.Neurons[0].OutSyns[0].I * 1000000000) /1000).toFixed(3)+ " ";
-							    letext=letext+"\n"
-
-
-							  }
-
-							  var endTime = performance.now()
-
-							  console.log(`Simulation took ${endTime - startTime} milliseconds`)
-
-							  document.getElementById('res').value=letext;
-							  console.log(window)
-							  drawGraph();
-							}
-
-
-							function addtoglobnet(){
-
-							  globalnet.addNeuron(new eNeuron());
-
-							  console.log(globalnet);
-
-
-							  updateSelectors()
-
-							  document.getElementById('listn1').selectedIndex=document.getElementById('listn1').length-1;
-							  document.getElementById('listn2').selectedIndex=-1;
-
-							  displayNeuron()
-							}
-
-
-
-							function addSynapse(){
-							  var n1=globalnet.Neurons[(document.getElementById('listn1').selectedIndex)];
-							  var n2=globalnet.Neurons[(document.getElementById('listn2').selectedIndex)];
-							  n1.connectTo(n2);
-
-							  console.log(globalnet);
-							  displayNeuron()
-							  document.getElementById('synapses').selectedIndex=document.getElementById('synapses').length-1;
-							  displaySynapse()
-							  //document.getElementById('synapses').selectedIndex=n1.OutSyns.length-1;
-							  //  document.getElementById('synapses').value=n1.OutSyns[n1.OutSyns.length-1];
-							}
-
-							module.exports = { addtoglobnet, runGlobalNet,addSynapse};
-						},
-						"neuralNet.js": function (exports, module, require) {
-							module.exports = class neuralNet {
-								constructor(){
-									this.IDgenerator=0;
-									this.Neurons=[];
-									this.addNeuron=function(neuron){
-										this.Neurons.push(neuron);
-										neuron.ID=this.IDgenerator;
-										this.IDgenerator++;
-									};
-
-									this.deleteSynapse=function(lasynapse){
-										for (let i=0;i<this.Neurons.length;i++){
-											for (let j=0;j<this.Neurons[i].OutSyns.length;j++){ //for each out neuron
-												if (this.Neurons[i].OutSyns[j]===lasynapse){ //remove all conections pointing to deleted neuron
-													this.Neurons[i].OutSyns.splice(j,1);
-												}
-											}
-											for (let j=0;j<this.Neurons[i].InSyns.length;j++){ //for each out neuron
-												if (this.Neurons[i].InSyns[j]===lasynapse){ //remove all conections pointing to deleted neuron
-													this.Neurons[i].InSyns.splice(j,1);
-												}
-											}
-										}
-											lasynapse.delete(); //probably no need to do that since no more reference
+								for (let j=0;j<this.Neurons[i].InSyns.length;j++){
+									if (this.Neurons[i].InSyns[j].preNeuron.ID===ID){ //remove all conections coming from  deleted neuron
+										this.Neurons[i].InSyns[j].delete();
+										this.Neurons[i].InSyns.splice(j,1);
 									}
-
-									this.deleteNeuronByID=function(ID){
-										for (let i=0;i<this.Neurons.length;i++){
-											for (let j=0;j<this.Neurons[i].OutSyns.length;j++){ //for each out neuron
-												if (this.Neurons[i].OutSyns[j].postNeuron.ID===ID){ //remove all conections pointing to deleted neuron
-													this.Neurons[i].OutSyns[j].delete();
-													this.Neurons[i].OutSyns.splice(j,1);
-												}
-											}
-											for (let j=0;j<this.Neurons[i].InSyns.length;j++){
-												if (this.Neurons[i].InSyns[j].preNeuron.ID===ID){ //remove all conections coming from  deleted neuron
-													this.Neurons[i].InSyns[j].delete();
-													this.Neurons[i].InSyns.splice(j,1);
-												}
-											}
-										}
-
-										for (let i=0;i<this.Neurons.length;i++){
-											if (this.Neurons[i].ID===ID){
-												this.Neurons[i].delete();
-												this.Neurons.splice(i, 1);
-											}
-										}
-									};
-
-
-
-									this.update=function(dt){
-										for (let i=0;i<this.Neurons.length;i++){
-											this.Neurons[i].computeIsyn();
-											this.Neurons[i].update(dt);
-											//console.log(t+" "+n1.V+" "+n2.V+" "+n1.OutSyns[0].I+" "+n2.OutSyns[0].I);
-										}
-
-									};
 								}
+							}
+				
+							for (let i=0;i<this.Neurons.length;i++){
+								if (this.Neurons[i].ID===ID){
+									this.Neurons[i].delete();
+									this.Neurons.splice(i, 1);
+								}
+							}
+						};
+				
+				
+				
+						this.update=function(dt){
+							for (let i=0;i<this.Neurons.length;i++){
+								this.Neurons[i].computeIsyn();
+								this.Neurons[i].update(dt);
+								//console.log(t+" "+n1.V+" "+n2.V+" "+n1.OutSyns[0].I+" "+n2.OutSyns[0].I);
+							}
+				
+						};
+				
+						this.serialize=function(){
+							var Neurons=[];
+							for (let i=0;i<this.Neurons.length;i++){
+								Neurons.push(this.Neurons[i].serialize());
+							}
+							const obj={
+								IDgenerator:this.IDgenerator,
+								Neurons:Neurons,
+							}
+							return obj;
+						}
+				
+						this.deserialize=function(obj){
+							this.Neurons.length=0;
+							this.IDgenerator=obj.IDgenerator;
+							for (let i=0;i<obj.Neurons.length;i++){
+								this.Neurons.push(new eNeuron());
+								this.Neurons[i].deserialize(obj.Neurons[i]);
 							}
 						}
 					}
@@ -592,4 +670,4 @@
 			}
 		}
 	}
-})("/Users/renaud/Desktop/NeurinoJS/main");
+})("Desktop/NeurinoJS/main");

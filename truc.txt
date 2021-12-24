@@ -1,0 +1,1 @@
+{"IDgenerator":0,"ID":0,"Isyn":0,"Iext":0.00001,"type":"eNeuron","Vccp":5,"Vccm":-5,"V":0,"U":0,"C_v":0.000001,"C_u":1e-7,"R_Na_leak":100000,"R_K_leak":100000,"R_Na_on":10000,"R_K_on":20000,"R_Na_thresh":90000,"R_K_thresh":100000,"V_thresh":0.26315789473684215,"R_delay_up":10000,"R_delay_down":47000,"int1":1,"int2":0,"int3":0,"int4":0,"threshyst":0,"OutSyns":[],"InSyns":[]}

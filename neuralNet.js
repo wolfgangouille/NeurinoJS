@@ -1,7 +1,11 @@
+const eNeuron = require('./eNeuron.js');
+const eSyn = require('./eSyn.js');
+
 module.exports = class neuralNet {
 	constructor(){
 		this.IDgenerator=0;
 		this.Neurons=[];
+
 		this.addNeuron=function(neuron){
 			this.Neurons.push(neuron);
 			neuron.ID=this.IDgenerator;
@@ -12,7 +16,7 @@ module.exports = class neuralNet {
 			for (let i=0;i<this.Neurons.length;i++){
 				for (let j=0;j<this.Neurons[i].OutSyns.length;j++){ //for each out neuron
 					if (this.Neurons[i].OutSyns[j]===lasynapse){ //remove all conections pointing to deleted neuron
-						this.Neurons[i].OutSyns.splice(j,1);
+						this.Neurons[i].OutSyns.splice(j,1); //just remove reference
 					}
 				}
 				for (let j=0;j<this.Neurons[i].InSyns.length;j++){ //for each out neuron
@@ -21,7 +25,7 @@ module.exports = class neuralNet {
 					}
 				}
 			}
-				lasynapse.delete(); //probably no need to do that since no more reference
+			lasynapse.delete(); //probably no need to do that since no more reference
 		}
 
 		this.deleteNeuronByID=function(ID){
@@ -58,5 +62,26 @@ module.exports = class neuralNet {
 			}
 
 		};
+
+		this.serialize=function(){
+			var Neurons=[];
+			for (let i=0;i<this.Neurons.length;i++){
+				Neurons.push(this.Neurons[i].serialize());
+			}
+			const obj={
+				IDgenerator:this.IDgenerator,
+				Neurons:Neurons,
+			}
+			return obj;
+		}
+
+		this.deserialize=function(obj){
+			this.Neurons.length=0;
+			this.IDgenerator=obj.IDgenerator;
+			for (let i=0;i<obj.Neurons.length;i++){
+				this.Neurons.push(new eNeuron());
+				this.Neurons[i].deserialize(obj.Neurons[i]);
+			}
+		}
 	}
 }
