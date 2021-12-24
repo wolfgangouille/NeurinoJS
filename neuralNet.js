@@ -82,6 +82,16 @@ module.exports = class neuralNet {
 				this.Neurons.push(new eNeuron());
 				this.Neurons[i].deserialize(obj.Neurons[i]);
 			}
+			for (let i=0;i<obj.Neurons.length;i++){
+				for (let j=0;j<obj.Neurons[i].OutSyns.length;j++){
+					for (let k=0;k<obj.Neurons.length;k++){
+						if (this.Neurons[k].ID===obj.Neurons[i].OutSyns[j].postNeuronID){
+							this.Neurons[i].connectTo(this.Neurons[k]);
+							this.Neurons[i].OutSyns[this.Neurons[i].OutSyns.length-1].deserialize(obj.Neurons[i].OutSyns[j]);
+						}
+					}
+				}
+			}
 		}
 	}
 }

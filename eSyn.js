@@ -148,5 +148,26 @@ module.exports = class eSyn {
 			};
 			return obj;
 		}
+
+		this.deserialize=function(obj){
+
+				this.ID=obj.ID;
+			  this.I=obj.I;
+				this.preFire=obj.preFire;
+				this.postFire=obj.postFire;
+				//this.postNeuron=obj.; // handle in network class (a synapse without network makes no sense)
+				//this.preNeuron=obj.;
+				this.VT=obj.VT; //mosfet threshold in Volt
+				this.S1=obj.S1;  //positive for excitatory synapses
+				this.S2=obj.S2;
+				this.VG=obj.VG;
+				this.U_stock=obj.U_stock;
+				this.R_w=obj.R_w;
+				this.C_stock=obj.C_stock;
+			  this.R_replen=obj.R_replen;
+				this.R_up=obj.R_up;
+				this.R_decay=obj.R_decay;
+				this.C_speed=obj.C_speed;
+		}
 	}
 }
