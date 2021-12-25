@@ -9,6 +9,9 @@ const mesfoncs = require('./mesfoncs.js');
 addtoglobnet=mesfoncs.addtoglobnet;
 runGlobalNet=mesfoncs.runGlobalNet;
 addSynapse=mesfoncs.addSynapse;
+downloadNet=mesfoncs.downloadNet;
+uploadNet=mesfoncs.uploadNet;
+
 //mafonc();
 globalnet=new neuralNet();
 
