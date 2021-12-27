@@ -50,17 +50,11 @@ function runGlobalNet(){
 
 
 function addtoglobnet(){
-
   globalnet.addNeuron(new eNeuron());
-
   console.log(globalnet);
-
-
   updateSelectors()
-
   document.getElementById('listn1').selectedIndex=document.getElementById('listn1').length-1;
   document.getElementById('listn2').selectedIndex=-1;
-
   displayNeuron()
 }
 
@@ -70,13 +64,37 @@ function addSynapse(){
   var n1=globalnet.Neurons[(document.getElementById('listn1').selectedIndex)];
   var n2=globalnet.Neurons[(document.getElementById('listn2').selectedIndex)];
   n1.connectTo(n2);
-
   console.log(globalnet);
   displayNeuron()
   document.getElementById('synapses').selectedIndex=document.getElementById('synapses').length-1;
   displaySynapse()
   //document.getElementById('synapses').selectedIndex=n1.OutSyns.length-1;
   //  document.getElementById('synapses').value=n1.OutSyns[n1.OutSyns.length-1];
+}
+
+function deleteNeuron(){
+  if (document.getElementById('listn1').selectedIndex>=0){
+    var neur=globalnet.Neurons[(document.getElementById('listn1').selectedIndex)];
+    globalnet.deleteNeuronByID(neur.ID);
+    updateSelectors();
+
+    document.getElementById('listn1').selectedIndex=-1;
+    document.getElementById('listn2').selectedIndex=-1;
+
+    displayNeuron();
+  }
+}
+
+
+function deleteSynapse(){
+  if (document.getElementById('synapses').selectedIndex>=0){
+    var neur=globalnet.Neurons[(document.getElementById('listn1').selectedIndex)];
+    var syn=neur.OutSyns[(document.getElementById('synapses').selectedIndex)];
+    globalnet.deleteSynapse(syn);
+    updateSelectors();
+    displayNeuron();
+    document.getElementById('synapses').selectedIndex=-1;
+  }
 }
 
 function downloadNet(){
@@ -113,4 +131,5 @@ function uploadNet(){
 }
 
 
-module.exports = { addtoglobnet, runGlobalNet,addSynapse,downloadNet,uploadNet};
+
+module.exports = { addtoglobnet, runGlobalNet,addSynapse, downloadNet,uploadNet, deleteNeuron,deleteSynapse};

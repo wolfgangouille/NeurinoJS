@@ -520,10 +520,6 @@
 				console.log(window)
 				//console.log(n1);
 				//console.log(n2);
-				xdata=[];
-				simuldata=[];
-				myChart=null;
-				colors=["red","green","blue","magenta","yellow","cyan","black"]
 			},
 			"mesfoncs.js": function (exports, module, require) {
 				const eNeuron = require('./eNeuron.js');
